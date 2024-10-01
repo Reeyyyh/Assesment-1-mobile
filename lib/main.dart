@@ -6,13 +6,15 @@ import 'app/modules/3_favorite/views/favorite_view.dart';
 import 'app/modules/4_profile/views/profile_view.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return const GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: MainPage(),
     );
@@ -20,7 +22,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _MainPageState createState() => _MainPageState();
 }
 
@@ -89,8 +94,8 @@ class _MainPageState extends State<MainPage> {
               backgroundColor: Colors.transparent,
               currentIndex: _selectedIndex.value,
               onTap: _onItemTapped,
-              selectedItemColor: const Color.fromARGB(218, 133, 120, 120),
-              unselectedItemColor: Colors.white,
+              selectedItemColor: const Color.fromARGB(234, 18, 228, 224),
+              unselectedItemColor: const Color.fromARGB(255, 255, 255, 255),
               selectedFontSize: 16,
               unselectedFontSize: 14,
               type: BottomNavigationBarType.fixed,
