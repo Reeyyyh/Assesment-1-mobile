@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/app/modules/3_favorite/controllers/favorite_controller.dart';
 import 'package:get/get.dart';
 
-
 class FavoriteView extends StatelessWidget {
   FavoriteView({super.key});
   final FavoriteController controller = Get.put(FavoriteController());
