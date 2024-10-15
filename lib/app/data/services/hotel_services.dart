@@ -5,7 +5,8 @@ class HotelService {
   Future<List<dynamic>> fetchNewsData() async {
 
     const String apikey = 'YOUR_API_KEY';
-    const String apiUrl = 'https://newsdata.io/api/1/news?$apikey&q=liburan';
+    const String apiUrl = 'https://newsdata.io/api/1/news?apikey=$apikey&q=liburan';
+    
 
     final response = await http.get(Uri.parse(apiUrl));
 
