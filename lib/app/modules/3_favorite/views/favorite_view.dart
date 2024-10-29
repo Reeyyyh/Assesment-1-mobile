@@ -10,11 +10,11 @@ class FavoriteView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50.0), // Tinggi AppBar
+        preferredSize: const Size.fromHeight(50.0),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(30.0), // Sudut kiri bawah
-            bottomRight: Radius.circular(30.0), // Sudut kanan bawah
+            bottomLeft: Radius.circular(25.0),
+            bottomRight: Radius.circular(25.0),
           ),
           child: AppBar(
             flexibleSpace: Container(

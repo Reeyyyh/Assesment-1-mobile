@@ -73,7 +73,6 @@ class _MainPageState extends State<MainPage> {
                             : Colors.grey,
                       ),
                     ),
-                    // Ubah nilai dari 5 ke 2
                     Text(
                       index == 0
                           ? 'Home'

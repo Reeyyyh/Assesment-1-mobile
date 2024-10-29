@@ -12,15 +12,15 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50.0), // Tinggi AppBar
+        preferredSize: const Size.fromHeight(50.0),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(25.0), // Sudut kiri bawah
-            bottomRight: Radius.circular(25.0), // Sudut kanan bawah
+            bottomLeft: Radius.circular(25.0),
+            bottomRight: Radius.circular(25.0),
           ),
           child: AppBar(
             flexibleSpace: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Colors.purple, Colors.blueAccent],
                   begin: Alignment.topLeft,
@@ -28,9 +28,9 @@ class HomeView extends StatelessWidget {
                 ),
               ),
             ),
-            title: Column(
+            title: const Column(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
+              children: [
                 Text(
                   'Home',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

@@ -12,11 +12,11 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50.0), // Tinggi AppBar
+        preferredSize: const Size.fromHeight(50.0),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(25.0), // Sudut kiri bawah
-            bottomRight: Radius.circular(25.0), // Sudut kanan bawah
+            bottomLeft: Radius.circular(25.0),
+            bottomRight: Radius.circular(25.0),
           ),
           child: AppBar(
             flexibleSpace: Container(
@@ -38,7 +38,7 @@ class ProfileView extends StatelessWidget {
               ],
             ),
             centerTitle: true,
-            elevation: 0, // Menghilangkan shadow
+            elevation: 0,
           ),
         ),
       ),
