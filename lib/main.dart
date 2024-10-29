@@ -8,10 +8,12 @@ import 'package:get/get.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Memastikan binding sudah diinisialisasi
   await Firebase.initializeApp(); // Inisialisasi Firebase
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

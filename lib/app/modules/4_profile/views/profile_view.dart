@@ -54,9 +54,42 @@ class ProfileView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Gambar Profil
+                    // Gambar Profil dengan opsi hapus
                     GestureDetector(
-                      onTap: controller.pickImage,
+                      onTap: () {
+                        if (controller.imagePath.value.isEmpty) {
+                          // Jika tidak ada gambar, langsung membuka galeri
+                          controller.pickImage();
+                        } else {
+                          // Jika ada gambar, tampilkan dialog konfirmasi
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Foto Profil'),
+                                content: const Text(
+                                    'Pilih tindakan untuk foto profil Anda.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      controller.removeImage();
+                                    },
+                                    child: const Text('Hapus Foto'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      controller.pickImage();
+                                    },
+                                    child: const Text('Ganti Foto'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      },
                       child: CircleAvatar(
                         radius: 70,
                         backgroundColor: const Color.fromARGB(191, 94, 92, 92),
@@ -85,11 +118,12 @@ class ProfileView extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
 
               // Garis Pemisah
-              Divider(color: Colors.grey.shade300, thickness: 1),
+              Divider(color: Colors.grey.shade300, thickness: 2),
 
+              const SizedBox(height: 70),
               // Menu Pengaturan
               ListTile(
                 leading: const Icon(Icons.person),
@@ -112,10 +146,26 @@ class ProfileView extends StatelessWidget {
                 leading: const Icon(Icons.logout),
                 title: const Text('Log Out'),
                 onTap: () {
-                  controller.logOut();
+                  Get.defaultDialog(
+                    radius: 10,
+                    backgroundColor: Colors.grey[50],
+                    confirmTextColor: Colors.green,
+                    cancelTextColor: Colors.red,
+                    title: "Konfirmasi",
+                    middleText: "Apakah Anda yakin ingin keluar?",
+                    textConfirm: "Ya",
+                    textCancel: "Tidak",
+                    onConfirm: () {
+                      controller.logOut();
+                      Get.back();
+                    },
+                    onCancel: () {
+                      Get.back();
+                    },
+                  );
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
             ],
           ),
         );

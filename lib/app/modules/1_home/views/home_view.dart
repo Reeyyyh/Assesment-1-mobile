@@ -67,7 +67,7 @@ class HomeView extends StatelessWidget {
                         size: 40,
                       ),
                       SizedBox(width: 16),
-                      Text("Hello Rehan"),
+                      Text("Hello username"),
                     ],
                   ),
                   Icon(
