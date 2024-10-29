@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/app/modules/3_favorite/controllers/favorite_controller.dart';
 import 'package:get/get.dart';
@@ -97,7 +98,9 @@ class _FavoriteItemCardState extends State<FavoriteItemCard>
 
           // Tampilkan snackbar atau notifikasi
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${widget.item['title']} removed')),
+            SnackBar(
+              content: Text('${widget.item['title']} removed'),
+            ),
           );
         },
         child: Card(

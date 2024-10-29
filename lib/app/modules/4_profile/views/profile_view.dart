@@ -87,6 +87,8 @@ class ProfileView extends StatelessWidget {
                   },
                 ),
                 ListTile(
+                  iconColor: Colors.red,
+                  textColor: Colors.red,
                   leading: const Icon(Icons.logout),
                   title: const Text('Log Out'),
                   onTap: () {
