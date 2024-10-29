@@ -1,105 +1,125 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/profile_controller.dart';
+import 'dart:io';
 
 class ProfileView extends StatelessWidget {
   ProfileView({super.key});
-  
+
   final ProfileController controller = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          // Avatar dan tombol di atas
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50.0), // Tinggi AppBar
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(25.0), // Sudut kiri bawah
+            bottomRight: Radius.circular(25.0), // Sudut kanan bawah
+          ),
+          child: AppBar(
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.purple, Colors.blueAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+            title: const Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
+                Text(
+                  'Profile',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            centerTitle: true,
+            elevation: 0, // Menghilangkan shadow
+          ),
+        ),
+      ),
+      body: Obx(() {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              // Header tanpa dekorasi
+              Container(
+                width: 250,
+                height: 250,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Obx(() {
-                      return CircleAvatar(
-                        radius: 60,
+                    // Gambar Profil
+                    GestureDetector(
+                      onTap: controller.pickImage,
+                      child: CircleAvatar(
+                        radius: 70,
                         backgroundColor: const Color.fromARGB(191, 94, 92, 92),
                         backgroundImage: controller.imagePath.value.isNotEmpty
-                            ? FileImage(controller.imageFile!) as ImageProvider
+                            ? FileImage(File(controller.imagePath.value))
                             : null,
                         child: controller.imagePath.value.isEmpty
                             ? const Icon(
                                 Icons.person,
-                                size: 60,
-                                color: Color.fromARGB(255, 0, 0, 0),
+                                size: 70,
+                                color: Colors.white,
                               )
                             : null,
-                      );
-                    }),
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: const Text(
-                        "Hello Rehan",
-                        style: TextStyle(fontSize: 24),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: controller.pickImage,
-                      child: const Text('Add Picture'),
-                    ),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: controller.removeImage,
-                      child: const Text('Remove Picture'),
+                    const SizedBox(height: 15),
+                    // Nama Pengguna
+                    Text(
+                      "Hello ${controller.userName.value}",
+                      style: const TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // Ubah warna teks menjadi hitam
+                      ),
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          
-          const SizedBox(height: 20),
+              ),
+              const SizedBox(height: 20),
 
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(10),
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text('Personal Info'),
-                  onTap: () {
-                    // Aksi ketika "Personal Info" ditekan
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.security),
-                  title: const Text('Security Settings'),
-                  onTap: () {
-                    // Aksi ketika "Security Settings" ditekan
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: const Text('Account Settings'),
-                  onTap: () {
-                    // Aksi ketika "Account Settings" ditekan
-                  },
-                ),
-                ListTile(
-                  iconColor: Colors.red,
-                  textColor: Colors.red,
-                  leading: const Icon(Icons.logout),
-                  title: const Text('Log Out'),
-                  onTap: () {
-                    // Aksi ketika "Log Out" ditekan
-                  },
-                ),
-              ],
-            ),
+              // Garis Pemisah
+              Divider(color: Colors.grey.shade300, thickness: 1),
+
+              // Menu Pengaturan
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: const Text('Personal Info'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.security),
+                title: const Text('Security Settings'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.settings),
+                title: const Text('Account Settings'),
+                onTap: () {},
+              ),
+              ListTile(
+                iconColor: Colors.red,
+                textColor: Colors.red,
+                leading: const Icon(Icons.logout),
+                title: const Text('Log Out'),
+                onTap: () {
+                  controller.logOut();
+                },
+              ),
+              const SizedBox(height: 20),
+            ],
           ),
-        ],
-      ),
+        );
+      }),
     );
   }
 }
