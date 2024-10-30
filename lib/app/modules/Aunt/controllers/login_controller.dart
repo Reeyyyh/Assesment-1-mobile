@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/app/modules/home/main_page.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hotel_app/app/modules/home/views/main_view.dart';
 
 class LoginController extends GetxController {
   final emailController = TextEditingController();

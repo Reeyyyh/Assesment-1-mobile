@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/app/modules/Aunt/controllers/register_controller.dart';
-import 'package:flutter_application/app/modules/Aunt/views/login_view.dart';
-
 import 'package:get/get.dart';
+import 'package:hotel_app/app/modules/Aunt/controllers/register_controller.dart';
+import 'package:hotel_app/app/modules/Aunt/views/login_view.dart';
 
 class RegisterView extends StatelessWidget {
   RegisterView({super.key});
@@ -67,17 +66,26 @@ class RegisterView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            TextField(
+            Obx(() => TextField(
               controller: registerController.passwordController,
-              obscureText: true,
+              obscureText: !registerController.isPasswordVisible.value,
               decoration: InputDecoration(
                 labelText: 'Password',
                 prefixIcon: const Icon(Icons.lock, color: Colors.blueAccent),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    registerController.isPasswordVisible.value ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.blueAccent,
+                  ),
+                  onPressed: () {
+                    registerController.togglePasswordVisibility();
+                  },
+                ),
               ),
-            ),
+            )),
             const SizedBox(height: 40),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -101,7 +109,6 @@ class RegisterView extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Teks untuk mengarahkan ke login
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

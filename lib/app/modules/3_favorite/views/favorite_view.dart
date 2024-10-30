@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/app/modules/3_favorite/controllers/favorite_controller.dart';
+
 import 'package:get/get.dart';
+import 'package:hotel_app/app/modules/3_favorite/controllers/favorite_controller.dart';
 
 class FavoriteView extends StatelessWidget {
   FavoriteView({super.key});
@@ -31,7 +32,10 @@ class FavoriteView extends StatelessWidget {
               children: [
                 Text(
                   'Favorite',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
               ],
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hotel_app/app/modules/4_profile/views/edit_profile_view.dart';
 import '../controllers/profile_controller.dart';
 import 'dart:io';
 
@@ -12,33 +13,35 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50.0),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(25.0),
-            bottomRight: Radius.circular(25.0),
-          ),
-          child: AppBar(
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.purple, Colors.blueAccent],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+        preferredSize: const Size.fromHeight(90.0),
+        child: ClipPath(
+          clipper: CustomAppBarClipper(), // Menggunakan Custom Clipper
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.purple, Colors.blueAccent],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
             ),
-            title: const Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'Profile',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-              ],
+            child: AppBar(
+              title: const Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Profile',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: Colors.transparent, // Membuat latar belakang transparan
             ),
-            centerTitle: true,
-            elevation: 0,
           ),
         ),
       ),
@@ -48,20 +51,17 @@ class ProfileView extends StatelessWidget {
           child: Column(
             children: [
               // Header tanpa dekorasi
-              Container(
+              SizedBox(
                 width: 250,
                 height: 250,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Gambar Profil dengan opsi hapus
                     GestureDetector(
                       onTap: () {
                         if (controller.imagePath.value.isEmpty) {
-                          // Jika tidak ada gambar, langsung membuka galeri
                           controller.pickImage();
                         } else {
-                          // Jika ada gambar, tampilkan dialog konfirmasi
                           showDialog(
                             context: context,
                             builder: (context) {
@@ -112,7 +112,7 @@ class ProfileView extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black, // Ubah warna teks menjadi hitam
+                        color: Colors.black,
                       ),
                     ),
                   ],
@@ -123,12 +123,14 @@ class ProfileView extends StatelessWidget {
               // Garis Pemisah
               Divider(color: Colors.grey.shade300, thickness: 2),
 
-              const SizedBox(height: 70),
+              const SizedBox(height: 30),
               // Menu Pengaturan
               ListTile(
                 leading: const Icon(Icons.person),
                 title: const Text('Personal Info'),
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => EditProfileView());
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.security),
@@ -172,4 +174,20 @@ class ProfileView extends StatelessWidget {
       }),
     );
   }
+}
+
+class CustomAppBarClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, size.height - 30); // Turun ke titik sebelum melengkung (disesuaikan)
+    path.quadraticBezierTo(size.width / 2, size.height, size.width, size.height - 30); // Lengkungkan ke bawah (disesuaikan)
+    path.lineTo(size.width, 0); // Garis ke atas
+    path.lineTo(0, 0); // Kembali ke titik awal
+    path.close(); // Menutup path
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

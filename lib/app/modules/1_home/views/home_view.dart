@@ -11,7 +11,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
+      appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50.0),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
@@ -33,7 +33,11 @@ class HomeView extends StatelessWidget {
               children: [
                 Text(
                   'Home',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white
+                  ),
                 ),
               ],
             ),
@@ -42,8 +46,10 @@ class HomeView extends StatelessWidget {
           ),
         ),
       ),
-        resizeToAvoidBottomInset: true,
-        body: Column(
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        // Tambahkan SingleChildScrollView di sini
+        child: Column(
           children: [
             Container(
               margin: const EdgeInsets.all(10.0),
@@ -67,7 +73,7 @@ class HomeView extends StatelessWidget {
                         size: 40,
                       ),
                       SizedBox(width: 16),
-                      Text("Hello username"),
+                      Text("Hello username [ dev nya mager ubah ]"),
                     ],
                   ),
                   Icon(
@@ -356,7 +362,7 @@ class HomeView extends StatelessWidget {
                                         color: Colors.red, size: 16),
                                     const SizedBox(width: 4),
                                     Text(
-                                      "Jogja",
+                                      "Bali",
                                       style: TextStyle(
                                           fontSize:
                                               controller.itemCategoryFont),
@@ -367,7 +373,7 @@ class HomeView extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      "Rp 900.000", // Harga untuk Pool
+                                      "Rp 1.500.000", // Harga di sebelah kiri
                                       style: TextStyle(
                                         fontSize: controller.itemCategoryFont,
                                         fontWeight: FontWeight.bold,
@@ -394,6 +400,8 @@ class HomeView extends StatelessWidget {
               ),
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }

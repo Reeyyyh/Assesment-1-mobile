@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/app/modules/components/web_view.dart';
+import 'package:hotel_app/app/modules/components/web_view.dart';
+
 
 class NewsCard extends StatelessWidget {
   final String title;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/app/modules/2_tripplan/controllers/tripplan_controller.dart';
+import 'package:hotel_app/app/modules/2_tripplan/controllers/tripplan_controller.dart';
+
 import '../../components/news_card.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +19,7 @@ class TripplanView extends StatelessWidget {
           borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(25.0),
             bottomRight: Radius.circular(25.0),
-          ), 
+          ),
           child: AppBar(
             flexibleSpace: Container(
               decoration: const BoxDecoration(
@@ -34,7 +35,10 @@ class TripplanView extends StatelessWidget {
               children: [
                 Text(
                   'TripPlan news',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
               ],
             ),

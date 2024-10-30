@@ -1,15 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_application/app/modules/Aunt/views/register_view.dart';
 import 'package:get/get.dart';
+import 'package:hotel_app/app/modules/Aunt/views/register_view.dart';
 import 'dart:io';
-
 import 'package:image_picker/image_picker.dart';
 
 class ProfileController extends GetxController {
   var imagePath = ''.obs;
   var imageFile;
-  var userName = ''.obs; 
+  var userName = ''.obs;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -20,7 +19,7 @@ class ProfileController extends GetxController {
     if (user != null) {
       DocumentSnapshot doc = await _firestore.collection('users').doc(user.uid).get();
       userName.value = doc['namaUser'];
-      imagePath.value = doc['profilePicture'] ?? ''; 
+      imagePath.value = doc['profilePicture'] ?? '';
     }
   }
 
@@ -29,16 +28,14 @@ class ProfileController extends GetxController {
     Get.offAll(RegisterView());
   }
 
-  // Method untuk memilih gambar
   Future<void> pickImage() async {
-  final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-  if (pickedFile != null) {
-    imageFile = File(pickedFile.path);
-    imagePath.value = pickedFile.path;
-    await _saveProfilePicture();
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      imageFile = File(pickedFile.path);
+      imagePath.value = pickedFile.path;
+      await _saveProfilePicture();
+    }
   }
-}
-
 
   Future<void> _saveProfilePicture() async {
     User? user = _auth.currentUser;
@@ -49,11 +46,9 @@ class ProfileController extends GetxController {
     }
   }
 
-  // Method untuk menghapus gambar
   Future<void> removeImage() async {
     imageFile = null;
     imagePath.value = '';
-    // Hapus gambar dari Firestore
     User? user = _auth.currentUser;
     if (user != null) {
       await _firestore.collection('users').doc(user.uid).update({
@@ -62,9 +57,20 @@ class ProfileController extends GetxController {
     }
   }
 
+  // Method untuk memperbarui nama pengguna
+  Future<void> updateUserName(String newName) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('users').doc(user.uid).update({
+        'namaUser': newName,
+      });
+      userName.value = newName; // Update nama pengguna di controller
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
-    fetchUserName(); // Ambil nama pengguna saat controller diinisialisasi
+    fetchUserName();
   }
 }
