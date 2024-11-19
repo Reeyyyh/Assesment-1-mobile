@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import 'package:hotel_app/app/modules/Aunt/views/register_view.dart';
+import 'package:hotel_app/app/modules/Aunt/views/login_view.dart';
+
 
 
 void main() async {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Hotel App',
-      home: RegisterView(),
+      home: LoginView(),
     );
   }
 }

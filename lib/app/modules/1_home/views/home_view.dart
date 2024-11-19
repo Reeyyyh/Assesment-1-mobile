@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:ui';
 import '../controllers/home_controller.dart';
 
 class HomeView extends StatelessWidget {
-  HomeView({super.key});
-
   final HomeController controller = Get.put(HomeController());
+
+  HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,379 +27,111 @@ class HomeView extends StatelessWidget {
                 ),
               ),
             ),
-            title: const Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'Home',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white
-                  ),
-                ),
-              ],
+            title: const Text(
+              'Home',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             centerTitle: true,
-            elevation: 0, // Menghilangkan shadow
+            elevation: 0,
           ),
         ),
       ),
-      resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
-        // Tambahkan SingleChildScrollView di sini
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.all(10.0),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: const Color.fromARGB(122, 215, 159, 159),
-                  width: 2.0,
+      body: RefreshIndicator(
+        onRefresh: controller.refreshData, // Fungsi untuk pull-to-refresh
+        child: Obx(() {
+          // Jika data kosong, tampilkan indikator loading atau pesan kosong
+          if (controller.hotelList.isEmpty) {
+            return const Center(
+              child: Text(
+                'No hotels available.',
+                style: TextStyle(fontSize: 18),
+              ),
+            );
+          }
+
+          // Jika data tersedia, tampilkan dalam bentuk GridView
+          return GridView.builder(
+            padding: const EdgeInsets.all(10.0),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 0.75,
+            ),
+            itemCount: controller.hotelList.length,
+            itemBuilder: (context, index) {
+              final hotel = controller.hotelList[index];
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.person,
-                        size: 40,
-                      ),
-                      SizedBox(width: 16),
-                      Text("Hello username [ dev nya mager ubah ]"),
-                    ],
-                  ),
-                  Icon(
-                    Icons.email,
-                    size: 40,
-                  ),
-                ],
-              ),
-            ),
-
-            // Search Bar Container
-            Container(
-              margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                  prefixIcon: Icon(Icons.search),
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-
-            // Category title and buttons
-            const SizedBox(height: 30), // Add some space
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Category",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 5), // Add some space
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 100, // Atur lebar tombol
-                        height: 50, // Atur tinggi tombol
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Populer",
-                            style: TextStyle(
-                                fontSize: controller.itemCategoryFont),
-                          ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Gambar Hotel
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(10),
                         ),
-                      ),
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Modern",
-                            style: TextStyle(
-                                fontSize: controller.itemCategoryFont),
-                          ),
+                        child: Image.network(
+                          hotel['image'] ?? '',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
                         ),
-                      ),
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text("Beach",
-                              style: TextStyle(
-                                  fontSize: controller.itemCategoryFont)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 40),
-
-            // Box for images
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start, // Align text to the left
-                        children: [
-                          Stack(
-                            children: [
-                              Container(
-                                height: 200,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  image: const DecorationImage(
-                                    image: AssetImage('assets/hotelLobby.jpeg'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                right: 8,
-                                top: 8,
-                                child: ClipRect(
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 5.0, sigmaY: 5.0),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(
-                                          4), // Padding around the rating
-                                      decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(
-                                            0.5), // Semi-transparent background
-                                        borderRadius: BorderRadius.circular(
-                                            8), // Rounded corners
-                                      ),
-                                      child: const Row(
-                                        children: [
-                                          Icon(Icons.star,
-                                              color: Colors.yellow, size: 16),
-                                          SizedBox(width: 2),
-                                          Text(
-                                            "4.8",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                              height:
-                                  5), // Add some space between image and title
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Lobby",
-                                  style:
-                                      TextStyle(fontSize: controller.imageFont),
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.location_on,
-                                        color: Colors.red, size: 16),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      "Jakarta",
-                                      style: TextStyle(
-                                          fontSize:
-                                              controller.itemCategoryFont),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Rp 1.200.000", // Harga di sebelah kiri
-                                      style: TextStyle(
-                                        fontSize: controller.itemCategoryFont,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    IconButton(
-                                      onPressed: () {
-                                        // Tambahkan aksi untuk love button di sini
-                                      },
-                                      icon: const Icon(Icons.favorite_border,
-                                          color: Colors.red),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                    // Detail Hotel
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Stack(
+                          Text(
+                            hotel['name'] ?? 'Unknown',
+                            style: TextStyle(
+                              fontSize: controller.imageFont,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
                             children: [
-                              Container(
-                                height: 200,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  image: const DecorationImage(
-                                    image: AssetImage('assets/hotelPool.jpeg'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                              const Icon(
+                                Icons.location_on,
+                                color: Colors.red,
+                                size: 16,
                               ),
-                              Positioned(
-                                right: 8,
-                                top: 8,
-                                child: ClipRect(
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 5.0, sigmaY: 5.0),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(
-                                          4), // Padding around the rating
-                                      decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(
-                                            0.5), // Semi-transparent background
-                                        borderRadius: BorderRadius.circular(
-                                            8), // Rounded corners
-                                      ),
-                                      child: const Row(
-                                        children: [
-                                          Icon(Icons.star,
-                                              color: Colors.yellow, size: 16),
-                                          SizedBox(width: 2),
-                                          Text(
-                                            "4.8",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                              const SizedBox(width: 4),
+                              Text(
+                                hotel['location'] ?? 'Unknown',
+                                style: TextStyle(
+                                  fontSize: controller.itemCategoryFont,
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 5),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Pool",
-                                  style:
-                                      TextStyle(fontSize: controller.imageFont),
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.location_on,
-                                        color: Colors.red, size: 16),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      "Bali",
-                                      style: TextStyle(
-                                          fontSize:
-                                              controller.itemCategoryFont),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Rp 1.500.000", // Harga di sebelah kiri
-                                      style: TextStyle(
-                                        fontSize: controller.itemCategoryFont,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    IconButton(
-                                      onPressed: () {
-                                        // Tambahkan aksi untuk love button di sini
-                                      },
-                                      icon: const Icon(Icons.favorite_border,
-                                          color: Colors.red),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                          const SizedBox(height: 4),
+                          Text(
+                            "Rp ${hotel['price'] ?? '0'}",
+                            style: TextStyle(
+                              fontSize: controller.itemCategoryFont,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+                  ],
+                ),
+              );
+            },
+          );
+        }),
       ),
     );
   }

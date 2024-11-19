@@ -24,7 +24,7 @@ class LoginController extends GetxController {
         password: passwordController.text.trim(),
       );
       Get.snackbar("Success", "Login berhasil!");
-      Get.offAll(() => const MainPage());
+      Get.offAll(() => MainPage());
     } catch (e) {
       Get.snackbar("Error", e.toString());
     }
