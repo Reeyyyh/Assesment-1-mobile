@@ -6,17 +6,28 @@ class HomeController extends GetxController {
   var imageFont = 24.0;
 
   var hotelList = [].obs;
+  var filteredHotelList = [].obs; // List untuk menampung hasil filter
 
   // Real-time listener for Firestore
   void fetchHotelsRealtime() {
     FirebaseFirestore.instance.collection('datahotel').snapshots().listen(
       (snapshot) {
         hotelList.value = snapshot.docs.map((doc) => doc.data()).toList();
+        filteredHotelList.value = hotelList; // Menampilkan semua data awal
       },
       onError: (error) {
         print("Error fetching data in real-time: $error");
       },
     );
+  }
+
+  // Filter berdasarkan lokasi
+  void filterHotels(String query) {
+    query = query.toLowerCase();
+    filteredHotelList.value = hotelList.where((hotel) {
+      var location = hotel['location']?.toLowerCase() ?? '';
+      return location.contains(query); // Filter data berdasarkan location
+    }).toList();
   }
 
   // Manual refresh function
@@ -25,6 +36,7 @@ class HomeController extends GetxController {
       final snapshot =
           await FirebaseFirestore.instance.collection('datahotel').get();
       hotelList.value = snapshot.docs.map((doc) => doc.data()).toList();
+      filteredHotelList.value = hotelList; // Reset filter saat refresh
     } catch (e) {
       print("Error refreshing data: $e");
     }
