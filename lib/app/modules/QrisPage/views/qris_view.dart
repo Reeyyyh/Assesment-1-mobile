@@ -9,10 +9,35 @@ class QRScanView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("QR Scan with Image Picker"),
-        backgroundColor: Colors.green,
-        elevation: 0, // Menghilangkan shadow agar lebih flat
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50.0),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(25.0),
+            bottomRight: Radius.circular(25.0),
+          ),
+          child: AppBar(
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.purple, Colors.blueAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+            title: const Text(
+              'QR Scanner',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            centerTitle: true,
+            elevation: 0,
+          ),
+        ),
       ),
       body: ChangeNotifierProvider(
         create: (_) => QRScanController(), // Menyediakan controller
