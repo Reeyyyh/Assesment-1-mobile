@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hotel_app/app/modules/Aunt/views/login_view.dart';
-import 'package:hotel_app/app/modules/home/views/main_view.dart';
 
 class RegisterController extends GetxController {
   final emailController = TextEditingController();
