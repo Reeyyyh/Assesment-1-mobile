@@ -55,7 +55,10 @@ dependencies:
   persistent_bottom_nav_bar: ^6.2.1
   permission_handler: ^11.3.1
   mobile_scanner: ^6.0.2
+
+  #audio
   speech_to_text: ^7.0.0
+  flutter_tts: ^4.2.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.1

@@ -140,7 +140,10 @@ class ProfileView extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Account Settings'),
-                onTap: () {},
+                onTap: () {
+                  controller.speakHello();
+                  print("tombol di temkan");
+                },
               ),
               ListTile(
                 iconColor: Colors.red,
