@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/app/modules/1_home/views/home_view.dart';
@@ -30,37 +31,38 @@ class MainPage extends StatelessWidget {
 List<PersistentBottomNavBarItem> _navBarsItems() {
   return [
     PersistentBottomNavBarItem(
-      icon: const Icon(Icons.home),
+      icon: const Icon(CupertinoIcons.home), // Ikon Cupertino untuk Home
       title: "Home",
       activeColorPrimary: Colors.blueAccent,
       inactiveColorPrimary: Colors.grey,
     ),
     PersistentBottomNavBarItem(
-      icon: const Icon(Icons.map),
+      icon: const Icon(CupertinoIcons.map), // Ikon Cupertino untuk Map
       title: "Trip Plan",
       activeColorPrimary: Colors.blueAccent,
       inactiveColorPrimary: Colors.grey,
     ),
     PersistentBottomNavBarItem(
-      icon: const Icon(Icons.qr_code, color: Colors.white,),
-      title: "QR Scan", // Item untuk QR Scan
+      icon: const Icon(CupertinoIcons.qrcode_viewfinder, color: Colors.white,), // Ikon Cupertino QR Scan
+      title: "QR Scan",
       activeColorPrimary: Colors.blueAccent,
       inactiveColorPrimary: Colors.grey,
     ),
     PersistentBottomNavBarItem(
-      icon: const Icon(Icons.favorite),
+      icon: const Icon(CupertinoIcons.heart), // Ikon Cupertino untuk Favorite
       title: "Favorite",
       activeColorPrimary: Colors.blueAccent,
       inactiveColorPrimary: Colors.grey,
     ),
     PersistentBottomNavBarItem(
-      icon: const Icon(Icons.person),
+      icon: const Icon(CupertinoIcons.person), // Ikon Cupertino untuk Profile
       title: "Profile",
       activeColorPrimary: Colors.blueAccent,
       inactiveColorPrimary: Colors.grey,
     ),
   ];
 }
+
 
   @override
   Widget build(BuildContext context) {
@@ -82,13 +84,13 @@ List<PersistentBottomNavBarItem> _navBarsItems() {
       hideNavigationBarWhenKeyboardAppears: true,
       decoration: NavBarDecoration(
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
         ),
         colorBehindNavBar: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withOpacity(0.3),
             spreadRadius: 2,
             blurRadius: 5,
             offset: const Offset(0, -2),

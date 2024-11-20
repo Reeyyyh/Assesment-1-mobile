@@ -1,118 +1,147 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_app/app/modules/QrisPage/controllers/qris_controller.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+import 'package:hotel_app/app/modules/QrisPage/controllers/qris_controller.dart';
 
 class QRScanView extends StatelessWidget {
-  const QRScanView({super.key});
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50.0),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(25.0),
-            bottomRight: Radius.circular(25.0),
-          ),
-          child: AppBar(
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.purple, Colors.blueAccent],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
+      appBar: AppBar(
+        title: const Text(
+          'QR Scanner',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blueAccent, Colors.purpleAccent],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            title: const Text(
-              'QR Scanner',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            centerTitle: true,
-            elevation: 0,
           ),
         ),
+        elevation: 5,
       ),
       body: ChangeNotifierProvider(
-        create: (_) => QRScanController(), // Menyediakan controller
+        create: (_) => QRScanController(),
         child: Consumer<QRScanController>(
           builder: (context, controller, _) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Menampilkan gambar yang dipilih
-                    if (controller.imageFile != null)
-                      Container(
-                        margin: EdgeInsets.only(bottom: 20),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12), // Membuat sudut gambar membulat
-                          child: Image.file(
-                            controller.imageFile!,
-                            height: 200,
-                            width: 200,
-                            fit: BoxFit.cover,
+            return Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.white, Colors.blueGrey],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              child: Column(
+                children: [
+                  // Area untuk QR Scanner
+                  Expanded(
+                    flex: 5,
+                    child: Container(
+                      margin: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
                           ),
-                        ),
+                        ],
                       ),
-                    // Menampilkan hasil pemindaian
-                    Text(
-                      controller.scannedResult.isEmpty
-                          ? 'Scan a QR Code'
-                          : 'Scanned Result: ${controller.scannedResult}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: controller.scannedResult.isEmpty
-                            ? Colors.black
-                            : Colors.green,
-                        fontWeight: FontWeight.bold,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: QRView(
+                          key: qrKey,
+                          onQRViewCreated: controller.startCamera,
+                        ),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    // Tombol untuk memilih gambar atau foto
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () => controller.pickImage(ImageSource.camera),
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12), backgroundColor: Colors.green, // Warna tombol hijau
+                  ),
+
+                  // Area hasil pemindaian
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
                           ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.camera_alt, size: 20),
-                              SizedBox(width: 8),
-                              Text('Take Photo'),
-                            ],
+                        ],
+                      ),
+                      child: Center(
+                        child: SelectableText(
+                          controller.scannedResult.isEmpty
+                              ? 'Scan a QR Code'
+                              : controller.scannedResult,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: controller.scannedResult.isEmpty
+                                ? Colors.grey
+                                : Colors.green,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(width: 20),
-                        ElevatedButton(
-                          onPressed: () => controller.pickImage(ImageSource.gallery),
+                      ),
+                    ),
+                  ),
+
+                  // Tombol tambahan untuk memilih gambar
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () =>
+                              controller.pickImage(ImageSource.camera),
+                          icon: const Icon(Icons.camera_alt, size: 20),
+                          label: const Text('Take Photo'),
                           style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12), backgroundColor: Colors.blue, // Warna tombol biru
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
                           ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.photo, size: 20),
-                              SizedBox(width: 8),
-                              Text('Choose Image'),
-                            ],
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () =>
+                              controller.pickImage(ImageSource.gallery),
+                          icon: const Icon(Icons.photo, size: 20),
+                          label: const Text('Choose Image'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },
