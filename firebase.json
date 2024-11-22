@@ -1,1 +1,25 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"hotel-46c62","appId":"1:993935550987:android:494f625bd8d0a17c01350e","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"hotel-46c62","configurations":{"android":"1:993935550987:android:494f625bd8d0a17c01350e","ios":"1:993935550987:ios:99a48b926ae72ad301350e","macos":"1:993935550987:ios:99a48b926ae72ad301350e","web":"1:993935550987:web:4ff5f1de488bee6401350e","windows":"1:993935550987:web:e0fa3de5b65bf5fe01350e"}}}}}}
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "hotel-46c62",
+                    "appId": "1:993935550987:android:494f625bd8d0a17c01350e",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "hotel-46c62",
+                    "configurations": {
+                        "android": "1:993935550987:android:494f625bd8d0a17c01350e",
+                        "ios": "1:993935550987:ios:99a48b926ae72ad301350e",
+                        "macos": "1:993935550987:ios:99a48b926ae72ad301350e",
+                        "web": "1:993935550987:web:4ff5f1de488bee6401350e",
+                        "windows": "1:993935550987:web:e0fa3de5b65bf5fe01350e"
+                    }
+                }
+            }
+        }
+    }
+}
