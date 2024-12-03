@@ -81,11 +81,17 @@ class CardDetailView extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 20),
+            const Divider(
+              thickness: 3,
+              height: 20,
+              indent: 10,
+              endIndent: 10,
+              color: Colors.orangeAccent,
+            ),
 
             GestureDetector(
               onTap: controller
-                  .openGoogleMaps, // Fungsi yang akan dipanggil saat di-tap
+                  .getHotelGeocoding, // Fungsi yang akan dipanggil saat di-tap
               child: Container(
                 padding:
                     const EdgeInsets.all(12.0), // Memberikan jarak di dalam box
@@ -109,9 +115,9 @@ class CardDetailView extends StatelessWidget {
                     Expanded(
                       child: Obx(
                         () => Text(
-                          controller.address.isNotEmpty
-                              ? controller.address.value
-                              : hotel['location'] ?? 'Unknown Location',
+                          controller.locationAddress.isNotEmpty
+                              ? controller.locationAddress.value
+                              : 'Tap untuk mendapatkan lokasi tujuan',
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
@@ -121,7 +127,88 @@ class CardDetailView extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+
+            const SizedBox(height: 10),
+
+            GestureDetector(
+              onTap: controller
+                  .getUserGeocoding, // Panggil fungsi geocoding pengguna
+              child: Container(
+                padding: const EdgeInsets.all(12.0), // Jarak di dalam box
+                decoration: BoxDecoration(
+                  color: Colors.white, // Warna latar belakang box
+                  borderRadius: BorderRadius.circular(10), // Sudut membulat
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5), // Warna shadow
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(0, 2), // Posisi shadow
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.my_location, color: Colors.blue),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Obx(
+                        () => Text(
+                          controller.userAddress.isNotEmpty
+                              ? controller.userAddress.value
+                              : 'Tap untuk mendapatkan lokasi Anda',
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            Container(
+              padding: const EdgeInsets.all(12.0), // Jarak di dalam box
+              decoration: BoxDecoration(
+                color: Colors.white, // Warna latar belakang box
+                borderRadius: BorderRadius.circular(10), // Sudut membulat
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5), // Warna shadow
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                    offset: const Offset(0, 2), // Posisi shadow
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.explore, color: Colors.blue),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Obx(
+                      () => Text(
+                        controller.distanceBetweenLocation.isNotEmpty
+                            ? controller.distanceBetweenLocation.value
+                            : 'Jarak lokasi',
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const Divider(
+              thickness: 3,
+              height: 20,
+              indent: 10,
+              endIndent: 10,
+              color: Colors.orangeAccent,
+            ),
 
             // Tombol untuk mendapatkan lokasi dan menghitung jarak
             Center(
@@ -143,11 +230,11 @@ class CardDetailView extends StatelessWidget {
                 ),
                 child: ElevatedButton.icon(
                   icon: const Icon(
-                    Icons.location_pin,
-                    color: Colors.redAccent,
+                    Icons.map_rounded,
+                    color: Colors.white,
                     size: 20, // Ukuran ikon
                   ),
-                  onPressed: () => controller.getUserLocation(context),
+                  onPressed: () => controller.getDistanceLocation(context),
                   label: const Text(
                     'Jarak ke lokasi',
                     style: TextStyle(fontSize: 16), // Ukuran teks

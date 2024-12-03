@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/app/modules/Aunt/views/login_view.dart';
 
-// Modul 4
+// Modul 5
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
