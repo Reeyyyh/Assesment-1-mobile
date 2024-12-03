@@ -6,5 +6,6 @@
 
     "dart.previewFlutterUiGuides": true,
     "dart.previewFlutterUiGuidesCustomTracking": true,
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "cmake.sourceDirectory": "D:/MyProgramming/VScode/FlutterDart/ForPrak/flutter_application/linux"
 }
