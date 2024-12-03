@@ -6,14 +6,14 @@ class HomeController extends GetxController {
   var imageFont = 24.0;
 
   var hotelList = [].obs;
-  var filteredHotelList = [].obs; // List untuk menampung hasil filter
+  var filteredHotelList = [].obs;
 
   // Real-time listener for Firestore
   void fetchHotelsRealtime() {
     FirebaseFirestore.instance.collection('datahotel').snapshots().listen(
       (snapshot) {
         hotelList.value = snapshot.docs.map((doc) => doc.data()).toList();
-        filteredHotelList.value = hotelList; // Menampilkan semua data awal
+        filteredHotelList.value = hotelList;
       },
       onError: (error) {
         print("Error fetching data in real-time: $error");
@@ -45,6 +45,6 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchHotelsRealtime(); // Start real-time listener
+    fetchHotelsRealtime();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hotel_app/app/modules/1_home/views/card_detail_view.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../controllers/home_controller.dart';
 
@@ -68,7 +69,7 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.mic),
+                    icon: const Icon(Icons.mic),
                     onPressed: () async {
                       bool available = await _speech.initialize();
                       if (available) {
@@ -104,66 +105,71 @@ class HomeView extends StatelessWidget {
                   itemCount: controller.filteredHotelList.length,
                   itemBuilder: (context, index) {
                     final hotel = controller.filteredHotelList[index];
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(10),
-                              ),
-                              child: Image.network(
-                                hotel['image'] ?? '',
-                                fit: BoxFit.cover,
-                                width: double.infinity,
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(() => CardDetailView(hotel: hotel));
+                      },
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(10),
+                                ),
+                                child: Image.network(
+                                  hotel['image'] ?? '',
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  hotel['name'] ?? 'Unknown',
-                                  style: TextStyle(
-                                    fontSize: controller.imageFont,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.location_on,
-                                      color: Colors.red,
-                                      size: 16,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    hotel['name'] ?? 'Unknown',
+                                    style: TextStyle(
+                                      fontSize: controller.imageFont,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      hotel['location'] ?? 'Unknown',
-                                      style: TextStyle(
-                                        fontSize: controller.itemCategoryFont,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.location_on,
+                                        color: Colors.red,
+                                        size: 16,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  "Rp ${hotel['price'] ?? '0'}",
-                                  style: TextStyle(
-                                    fontSize: controller.itemCategoryFont,
-                                    fontWeight: FontWeight.bold,
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        hotel['location'] ?? 'Unknown',
+                                        style: TextStyle(
+                                          fontSize: controller.itemCategoryFont,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    "Rp ${hotel['price'] ?? '0'}",
+                                    style: TextStyle(
+                                      fontSize: controller.itemCategoryFont,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },
