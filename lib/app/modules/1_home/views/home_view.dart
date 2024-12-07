@@ -4,11 +4,13 @@ import 'package:hotel_app/app/modules/1_home/views/card_detail_view.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../controllers/home_controller.dart';
 
+
 class HomeView extends StatelessWidget {
   final HomeController controller = Get.put(HomeController());
   final stt.SpeechToText _speech = stt.SpeechToText();
 
   HomeView({super.key});
+
 
   @override
   Widget build(BuildContext context) {

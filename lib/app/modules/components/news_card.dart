@@ -9,12 +9,12 @@ class NewsCard extends StatelessWidget {
   final String imageUrl; // Tambahkan imageUrl
 
   const NewsCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.url,
     required this.imageUrl,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,12 +61,4 @@ class NewsCard extends StatelessWidget {
     );
   }
 
-  // void _launchURL(String url) async {
-  //   // Gunakan url_launcher untuk membuka link
-  //   if (await canLaunch(url)) {
-  //     await launch(url);
-  //   } else {
-  //     throw 'Could not launch $url';
-  //   }
-  // }
 }

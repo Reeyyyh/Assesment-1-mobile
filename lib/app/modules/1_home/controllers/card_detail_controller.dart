@@ -11,8 +11,17 @@ class CardDetailController extends GetxController {
   var userAddress = ''.obs;
   var distanceBetweenLocation = ''.obs;
 
+
+  @override
+  void onInit() {
+    getHotelGeocoding();
+    getUserGeocoding();
+    super.onInit();
+  }
+
   CardDetailController(this.hotel);
 
+  
   // Fungsi untuk membuka Google Maps ke lokasi hotel
   Future<void> getHotelGeocoding() async {
     final double? latitude = hotel['latitude'];
@@ -30,19 +39,20 @@ class CardDetailController extends GetxController {
             '${place.name}, ${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}, ${place.postalCode}';
 
         // Menampilkan Google Maps
-        final Uri url = Uri.parse(
-            'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
-        if (await canLaunchUrl(url)) {
-          await launchUrl(url);
-          print("Maps opened with location: ${locationAddress.value}");
-        } else {
-          Get.snackbar(
-            'Error',
-            'Could not open Google Maps.',
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
-        }
+      //   final Uri url = Uri.parse(
+      //       'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+      //   if (await canLaunchUrl(url)) {
+      //     await launchUrl(url);
+      //     print("Maps opened with location: ${locationAddress.value}");
+      //   } else {
+      //     Get.snackbar(
+      //       'Error',
+      //       'Could not open Google Maps.',
+      //       backgroundColor: Colors.red,
+      //       colorText: Colors.white,
+      //     );
+      //   }
+
       } catch (e) {
         Get.snackbar(
           'Error',
@@ -54,12 +64,13 @@ class CardDetailController extends GetxController {
     } else {
       Get.snackbar(
         'Error',
-        'Location data is unavailable.',
+        'Location data tidak tersedia.',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
     }
   }
+
 
 Future<void> getUserGeocoding() async {
   try {
@@ -102,15 +113,15 @@ Future<void> getUserGeocoding() async {
         '${place.name}, ${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}, ${place.postalCode}';
 
     // Buka lokasi di Google Maps
-    String googleMapsUrl =
-        'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}';
+    // String googleMapsUrl =
+    //     'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}';
 
-    if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
-      await launchUrl(Uri.parse(googleMapsUrl),
-          mode: LaunchMode.externalApplication); // Pastikan buka aplikasi eksternal
-    } else {
-      throw 'Could not open the map.';
-    }
+    // if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+    //   await launchUrl(Uri.parse(googleMapsUrl),
+    //       mode: LaunchMode.externalApplication); // Pastikan buka aplikasi eksternal
+    // } else {
+    //   throw 'Could not open the map.';
+    // }
   } catch (e) {
     Get.snackbar(
       'Error',
