@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hotel_app/app/modules/4_profile/views/edit_profile_view.dart';
+import 'package:hotel_app/app/modules/4_profile/views/theme_setting_view.dart';
 import '../controllers/profile_controller.dart';
 import 'dart:io';
 
@@ -16,21 +18,24 @@ class ProfileView extends StatelessWidget {
         child: ClipPath(
           clipper: CustomAppBarClipper(),
           child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.purple, Colors.blueAccent],
+                colors: [
+                  Theme.of(context).primaryColor,
+                  Theme.of(context).colorScheme.secondary
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
             child: AppBar(
-              title: const Text(
+              title: Text(
                 'Profile',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
               ),
               centerTitle: true,
               elevation: 0,
@@ -63,14 +68,16 @@ class ProfileView extends StatelessWidget {
                                 Navigator.pop(context);
                                 controller.removeImage();
                               },
-                              child: const Text('Hapus Foto'),
+                              child: Text('Hapus Foto',
+                                  style: Theme.of(context).textTheme.bodyLarge),
                             ),
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(context);
                                 controller.pickImage();
                               },
-                              child: const Text('Ganti Foto'),
+                              child: Text('Ganti Foto',
+                                  style: Theme.of(context).textTheme.bodyLarge),
                             ),
                           ],
                         );
@@ -98,19 +105,30 @@ class ProfileView extends StatelessWidget {
               // Nama Pengguna dan Tombol Sapaan
               Text(
                 "Hello ${controller.userName.value}",
-                style: const TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white // Jika tema gelap, gunakan warna putih
+                          : Colors
+                              .black, // Jika tema terang, gunakan warna hitam
+                    ),
               ),
               const SizedBox(height: 10),
               ElevatedButton.icon(
                 onPressed: () {
                   controller.speakHello();
                 },
-                icon: const Icon(Icons.volume_up),
-                label: const Text("Play Greeting"),
+                icon: const Icon(
+                  Icons.volume_up,
+                  color: Colors.white,
+                ),
+                label: const Text(
+                  "Play Greeting",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).primaryColor,
+                ),
               ),
               const SizedBox(height: 30),
 
@@ -118,7 +136,9 @@ class ProfileView extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.person),
                 title: const Text('Personal Info'),
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => EditProfileView());
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.security),
@@ -128,7 +148,9 @@ class ProfileView extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Account Settings'),
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => const ThemeSettingsView());
+                },
               ),
               ListTile(
                 iconColor: Colors.red,
@@ -165,7 +187,8 @@ class CustomAppBarClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
     path.lineTo(0, size.height - 30);
-    path.quadraticBezierTo(size.width / 2, size.height, size.width, size.height - 30);
+    path.quadraticBezierTo(
+        size.width / 2, size.height, size.width, size.height - 30);
     path.lineTo(size.width, 0);
     path.close();
     return path;

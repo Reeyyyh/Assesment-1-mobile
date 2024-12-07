@@ -6,7 +6,7 @@ class NewsCard extends StatelessWidget {
   final String title;
   final String description;
   final String url;
-  final String imageUrl; // Tambahkan imageUrl
+  final String imageUrl;
 
   const NewsCard({
     super.key,

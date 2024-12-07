@@ -4,8 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:hotel_app/app/modules/QrisPage/controllers/qris_controller.dart';
 
+
 class QRScanView extends StatelessWidget {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
+  QRScanView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +16,17 @@ class QRScanView extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'QR Scanner',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blueAccent, Colors.purpleAccent],
+              colors: [
+                Theme.of(context).primaryColor, // Menggunakan primaryColor dari tema
+                Theme.of(context).colorScheme.secondary // Menggunakan secondaryColor dari tema
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -32,9 +39,12 @@ class QRScanView extends StatelessWidget {
         child: Consumer<QRScanController>(
           builder: (context, controller, _) {
             return Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.white, Colors.blueGrey],
+                  colors: [
+                    Theme.of(context).scaffoldBackgroundColor, // Warna background sesuai tema
+                    Theme.of(context).primaryColorLight, // Sesuaikan dengan warna yang diinginkan
+                  ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
@@ -74,7 +84,7 @@ class QRScanView extends StatelessWidget {
                           horizontal: 16.0, vertical: 8.0),
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).cardColor, // Gunakan cardColor dari tema
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
@@ -93,8 +103,8 @@ class QRScanView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 18,
                             color: controller.scannedResult.isEmpty
-                                ? Colors.grey
-                                : Colors.green,
+                                ? Theme.of(context).hintColor // Warna hintColor dari tema
+                                : Theme.of(context).primaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -114,7 +124,7 @@ class QRScanView extends StatelessWidget {
                           icon: const Icon(Icons.camera_alt, size: 20),
                           label: const Text('Take Photo'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
+                            backgroundColor: Theme.of(context).hintColor, // Gunakan hintColor dari tema
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 12),
@@ -129,7 +139,7 @@ class QRScanView extends StatelessWidget {
                           icon: const Icon(Icons.photo, size: 20),
                           label: const Text('Choose Image'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
+                            backgroundColor: Theme.of(context).primaryColor, // Gunakan primaryColor dari tema
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 12),

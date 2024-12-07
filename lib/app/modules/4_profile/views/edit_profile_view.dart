@@ -9,17 +9,20 @@ class EditProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _nameController = TextEditingController(text: controller.userName.value);
+    final TextEditingController nameController = TextEditingController(text: controller.userName.value);
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(90.0), // Atur tinggi AppBar sesuai keinginan
+        preferredSize: const Size.fromHeight(90.0),
         child: ClipPath(
-          clipper: CustomAppBarClipper(), // Menggunakan Custom Clipper
+          clipper: CustomAppBarClipper(),
           child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.purple, Colors.blueAccent],
+                colors: [
+                  Theme.of(context).primaryColor, 
+                  Theme.of(context).colorScheme.secondary
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -40,7 +43,7 @@ class EditProfileView extends StatelessWidget {
               ),
               centerTitle: true,
               elevation: 0,
-              backgroundColor: Colors.transparent, // Membuat latar belakang transparan
+              backgroundColor: Colors.transparent,
             ),
           ),
         ),
@@ -50,79 +53,71 @@ class EditProfileView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Judul
-            const Text(
+            Text(
               'Edit Nama Pengguna',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 20),
-
-            // Input TextField
+            
             TextField(
-              controller: _nameController,
+              controller: nameController,
               decoration: InputDecoration(
                 labelText: 'Nama Pengguna',
+                labelStyle: Theme.of(context).textTheme.bodyLarge,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0), // Membulatkan sudut border
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
                 filled: true,
-                fillColor: Colors.grey[200],
+                fillColor: Theme.of(context).colorScheme.surfaceVariant, // Menggunakan colorScheme untuk fillColor
               ),
             ),
             const SizedBox(height: 20),
 
-            // Tombol Simpan dan Batal dalam satu baris
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Mengatur jarak antar tombol
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () async {
-                      // Update nama pengguna di Firestore
-                      await controller.updateUserName(_nameController.text);
-                      Get.back(); // Kembali ke halaman profile setelah sukses
+                      await controller.updateUserName(nameController.text);
+                      Get.back();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue, // Mengatur warna latar belakang tombol
-                      padding: const EdgeInsets.symmetric(vertical: 15), // Mengatur padding
+                      backgroundColor: Theme.of(context).colorScheme.primary, // Menggunakan colorScheme.primary
+                      padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0), // Membulatkan sudut tombol
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Simpan',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white), // Mengatur ukuran, gaya, dan warna teks
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
                     ),
                   ),
                 ),
-                const SizedBox(width: 10), // Jarak antar tombol
+                const SizedBox(width: 10),
                 Expanded(
                   child: TextButton(
                     onPressed: () {
-                      Get.back(); // Kembali tanpa menyimpan perubahan
+                      Get.back();
                     },
                     style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 15), // Mengatur padding
-                      backgroundColor: Colors.red[200], // Warna latar belakang tombol batal
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      backgroundColor: Theme.of(context).colorScheme.error.withOpacity(0.2), // Menggunakan colorScheme.error untuk background
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0), // Membulatkan sudut tombol
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Batal',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white), // Mengatur ukuran, gaya, dan warna teks
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
                     ),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 20),
-
-            // Pemisah
-            Divider(color: Colors.grey.shade400, thickness: 1.5), // Garis pemisah
+            Divider(color: Theme.of(context).dividerColor, thickness: 1.5), // Menggunakan dividerColor dari tema
           ],
         ),
       ),
@@ -134,11 +129,11 @@ class CustomAppBarClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path = Path();
-    path.lineTo(0, size.height - 30); // Turun ke titik sebelum melengkung (disesuaikan)
-    path.quadraticBezierTo(size.width / 2, size.height, size.width, size.height - 30); // Lengkungkan ke bawah (disesuaikan)
-    path.lineTo(size.width, 0); // Garis ke atas
-    path.lineTo(0, 0); // Kembali ke titik awal
-    path.close(); // Menutup path
+    path.lineTo(0, size.height - 30);
+    path.quadraticBezierTo(size.width / 2, size.height, size.width, size.height - 30);
+    path.lineTo(size.width, 0);
+    path.lineTo(0, 0);
+    path.close();
     return path;
   }
 

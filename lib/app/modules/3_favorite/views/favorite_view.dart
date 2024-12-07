@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:hotel_app/app/modules/3_favorite/controllers/favorite_controller.dart';
 
@@ -9,6 +8,8 @@ class FavoriteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // Ambil tema aktif
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50.0),
@@ -19,9 +20,9 @@ class FavoriteView extends StatelessWidget {
           ),
           child: AppBar(
             flexibleSpace: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.purple, Colors.blueAccent],
+                  colors: [theme.primaryColor, theme.colorScheme.secondary], // Sesuaikan dengan tema
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -33,9 +34,10 @@ class FavoriteView extends StatelessWidget {
                 Text(
                   'Favorite',
                   style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
@@ -90,10 +92,8 @@ class _FavoriteItemCardState extends State<FavoriteItemCard>
     );
 
     // Define the slide transition animation
-    _offsetAnimation = Tween<Offset>(
-      begin: const Offset(0.0, -1.0), // Start from above
-      end: const Offset(0.0, 0.0), // Slide to original position
-    ).animate(CurvedAnimation(
+    _offsetAnimation = Tween<Offset>(begin: const Offset(0.0, -1.0), end: const Offset(0.0, 0.0))
+        .animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
     ));
@@ -112,6 +112,8 @@ class _FavoriteItemCardState extends State<FavoriteItemCard>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // Ambil tema aktif
+
     return SlideTransition(
       position: _offsetAnimation,
       child: Dismissible(
@@ -120,7 +122,7 @@ class _FavoriteItemCardState extends State<FavoriteItemCard>
         background: Container(
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          color: Colors.red,
+          color: theme.colorScheme.error, // Sesuaikan dengan warna error di tema
           child: const Icon(
             Icons.delete,
             color: Colors.white,
@@ -139,6 +141,7 @@ class _FavoriteItemCardState extends State<FavoriteItemCard>
         },
         child: Card(
           margin: const EdgeInsets.symmetric(vertical: 8.0),
+          color: theme.cardColor, // Sesuaikan dengan warna card di tema
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -161,8 +164,7 @@ class _FavoriteItemCardState extends State<FavoriteItemCard>
                     children: [
                       Text(
                         widget.item['title']!,
-                        style: const TextStyle(
-                          fontSize: 18,
+                        style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -177,7 +179,7 @@ class _FavoriteItemCardState extends State<FavoriteItemCard>
                           const SizedBox(width: 4),
                           Text(
                             widget.item['location']!,
-                            style: const TextStyle(color: Colors.grey),
+                            style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
                           ),
                         ],
                       ),
@@ -187,10 +189,9 @@ class _FavoriteItemCardState extends State<FavoriteItemCard>
                         children: [
                           Text(
                             widget.item['price']!,
-                            style: const TextStyle(
-                              fontSize: 16,
+                            style: theme.textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: Colors.green,
+                              color: theme.primaryColor,
                             ),
                           ),
                           const Icon(

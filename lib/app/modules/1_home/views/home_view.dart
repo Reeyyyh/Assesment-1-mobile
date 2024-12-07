@@ -4,17 +4,16 @@ import 'package:hotel_app/app/modules/1_home/views/card_detail_view.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../controllers/home_controller.dart';
 
-
 class HomeView extends StatelessWidget {
   final HomeController controller = Get.put(HomeController());
   final stt.SpeechToText _speech = stt.SpeechToText();
 
   HomeView({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     TextEditingController searchController = TextEditingController();
+    final theme = Theme.of(context); // Ambil tema aktif
 
     return Scaffold(
       appBar: PreferredSize(
@@ -26,17 +25,17 @@ class HomeView extends StatelessWidget {
           ),
           child: AppBar(
             flexibleSpace: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.purple, Colors.blueAccent],
+                  colors: [theme.primaryColor, theme.colorScheme.secondary], 
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
               ),
             ),
-            title: const Text(
+            title: Text(
               'Home',
-              style: TextStyle(
+              style: theme.appBarTheme.titleTextStyle?.copyWith(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -71,7 +70,10 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.mic),
+                    icon: Icon(
+                      Icons.mic,
+                      color: theme.primaryColor, // Sesuaikan dengan tema
+                    ),
                     onPressed: () async {
                       bool available = await _speech.initialize();
                       if (available) {
@@ -87,10 +89,10 @@ class HomeView extends StatelessWidget {
             ),
             Obx(() {
               if (controller.hotelList.isEmpty) {
-                return const Center(
+                return Center(
                   child: Text(
                     'No hotels available.',
-                    style: TextStyle(fontSize: 18),
+                    style: theme.textTheme.bodyMedium?.copyWith(fontSize: 18),
                   ),
                 );
               }
@@ -137,7 +139,7 @@ class HomeView extends StatelessWidget {
                                 children: [
                                   Text(
                                     hotel['name'] ?? 'Unknown',
-                                    style: TextStyle(
+                                    style: theme.textTheme.bodyLarge?.copyWith(
                                       fontSize: controller.imageFont,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -145,15 +147,15 @@ class HomeView extends StatelessWidget {
                                   const SizedBox(height: 4),
                                   Row(
                                     children: [
-                                      const Icon(
+                                      Icon(
                                         Icons.location_on,
-                                        color: Colors.red,
+                                        color: theme.colorScheme.error, // Sesuaikan dengan tema
                                         size: 16,
                                       ),
                                       const SizedBox(width: 4),
                                       Text(
                                         hotel['location'] ?? 'Unknown',
-                                        style: TextStyle(
+                                        style: theme.textTheme.bodyMedium?.copyWith(
                                           fontSize: controller.itemCategoryFont,
                                         ),
                                       ),
@@ -162,7 +164,7 @@ class HomeView extends StatelessWidget {
                                   const SizedBox(height: 4),
                                   Text(
                                     "Rp ${hotel['price'] ?? '0'}",
-                                    style: TextStyle(
+                                    style: theme.textTheme.bodyMedium?.copyWith(
                                       fontSize: controller.itemCategoryFont,
                                       fontWeight: FontWeight.bold,
                                     ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/app/modules/2_tripplan/controllers/tripplan_controller.dart';
-
 import '../../components/news_card.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +11,8 @@ class TripplanView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // Ambil tema aktif
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50.0),
@@ -22,9 +23,9 @@ class TripplanView extends StatelessWidget {
           ),
           child: AppBar(
             flexibleSpace: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.purple, Colors.blueAccent],
+                  colors: [theme.primaryColor, theme.colorScheme.secondary], // Sesuaikan dengan tema
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -34,11 +35,12 @@ class TripplanView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  'TripPlan news',
+                  'TripPlan News',
                   style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
@@ -59,8 +61,9 @@ class TripplanView extends StatelessWidget {
               child: Text(
                 'Error: ${snapshot.error}',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.error, // Sesuaikan dengan tema
                 ),
               ),
             );
@@ -80,8 +83,7 @@ class TripplanView extends StatelessWidget {
                 title: news['title'],
                 description: news['description'] ?? 'No description available',
                 url: news['link'],
-                imageUrl:
-                    news['image_url'] ?? 'https://via.placeholder.com/150',
+                imageUrl: news['image_url'] ?? 'https://via.placeholder.com/150',
               );
             },
           );

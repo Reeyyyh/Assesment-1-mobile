@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hotel_app/app/modules/home/views/main_view.dart';
 
 class LoginController extends GetxController {
+  final RxBool obscureText = true.obs;
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 

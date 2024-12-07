@@ -31,11 +31,12 @@ class ProfileController extends GetxController {
   void fetchUserName() async {
     User? user = _auth.currentUser;
     if (user != null) {
-      DocumentSnapshot doc = await _firestore.collection('users').doc(user.uid).get();
+      DocumentSnapshot doc =
+          await _firestore.collection('users').doc(user.uid).get();
       userName.value = doc['namaUser'];
       imagePath.value = doc['profilePicture'] ?? '';
       // Delay untuk memastikan TTS siap digunakan
-      Future.delayed(Duration(milliseconds: 500), () {
+      Future.delayed(const Duration(milliseconds: 500), () {
         _speak("Hello, ${userName.value}");
       });
     }

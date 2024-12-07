@@ -3,22 +3,22 @@ import 'package:get/get.dart';
 import 'package:hotel_app/app/modules/Aunt/controllers/login_controller.dart';
 import 'package:hotel_app/app/modules/Aunt/views/register_view.dart';
 
-
 class LoginView extends StatelessWidget {
   LoginView({super.key});
 
   final LoginController loginController = Get.put(LoginController());
-  final RxBool obscureText = true.obs; // Untuk mengatur visibilitas password
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // Ambil tema aktif
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        title: const Text(
+        backgroundColor: theme.primaryColor,
+        title: Text(
           'Login',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: theme.appBarTheme.titleTextStyle,
         ),
         centerTitle: true,
         elevation: 0,
@@ -30,29 +30,29 @@ class LoginView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 "Welcome Back!",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent,
+                  color: theme.primaryColor,
                 ),
               ),
               const SizedBox(height: 10),
-              const Text(
+              Text(
                 "Login to your account to continue",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
               ),
               const SizedBox(height: 40),
               TextField(
                 controller: loginController.emailController,
                 decoration: InputDecoration(
                   labelText: 'Email',
-                  prefixIcon: const Icon(Icons.email, color: Colors.blueAccent),
+                  prefixIcon: Icon(
+                    Icons.email,
+                    color: theme.primaryColor,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -60,39 +60,47 @@ class LoginView extends StatelessWidget {
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 20),
-              Obx(() => TextField(
-                    controller: loginController.passwordController,
-                    obscureText: obscureText.value,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock, color: Colors.blueAccent),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          obscureText.value ? Icons.visibility_off : Icons.visibility,
-                          color: Colors.blueAccent,
-                        ),
-                        onPressed: () {
-                          obscureText.value = !obscureText.value;
-                        },
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+              Obx(
+                () => TextField(
+                  controller: loginController.passwordController,
+                  obscureText: loginController.obscureText.value,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: Icon(
+                      Icons.lock,
+                      color: theme.primaryColor,
                     ),
-                  )),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        loginController.obscureText.value
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: theme.primaryColor,
+                      ),
+                      onPressed: () {
+                        loginController.obscureText.value =
+                            !loginController.obscureText.value;
+                      },
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ),
               const SizedBox(height: 40),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
+                  backgroundColor: theme.primaryColor,
                   minimumSize: const Size.fromHeight(50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 onPressed: loginController.login,
-                child: const Text(
+                child: Text(
                   'Login',
-                  style: TextStyle(
+                  style: theme.textTheme.bodyLarge?.copyWith(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -103,18 +111,20 @@ class LoginView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     "Don't have an account? ",
-                    style: TextStyle(color: Colors.grey),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey,
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
                       Get.off(() => RegisterView());
                     },
-                    child: const Text(
+                    child: Text(
                       'Register',
                       style: TextStyle(
-                        color: Colors.blueAccent,
+                        color: theme.primaryColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

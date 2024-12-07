@@ -10,6 +10,7 @@ class CardDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(CardDetailController(hotel));
+    final theme = Theme.of(context); // Menggunakan tema yang sama
 
     return Scaffold(
       appBar: AppBar(
@@ -27,9 +28,9 @@ class CardDetailView extends StatelessWidget {
           ),
         ),
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.purple, Colors.blueAccent],
+              colors: [theme.primaryColor, theme.colorScheme.secondary],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -53,15 +54,13 @@ class CardDetailView extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               hotel['name'] ?? 'Unknown',
-              style: const TextStyle(
-                fontSize: 30,
+              style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
               "Price: Rp ${hotel['price'] ?? '0'}",
-              style: const TextStyle(
-                fontSize: 18,
+              style: theme.textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -70,17 +69,18 @@ class CardDetailView extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: theme.cardColor, // Sesuaikan dengan tema
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   hotel['description'] ?? 'No description available.',
-                  style: const TextStyle(
-                      fontSize: 16, height: 1.5, fontWeight: FontWeight.bold),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    height: 1.5,
+                  ),
                 ),
               ),
             ),
-
             const Divider(
               thickness: 3,
               height: 20,
@@ -88,23 +88,19 @@ class CardDetailView extends StatelessWidget {
               endIndent: 10,
               color: Colors.orangeAccent,
             ),
-
             GestureDetector(
-              onTap: controller
-                  .getHotelGeocoding, // Fungsi yang akan dipanggil saat di-tap
+              onTap: controller.getHotelGeocoding,
               child: Container(
-                padding:
-                    const EdgeInsets.all(12.0), // Memberikan jarak di dalam box
+                padding: const EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
-                  color: Colors.white, // Warna latar belakang box
-                  borderRadius:
-                      BorderRadius.circular(10), // Membuat sudut membulat
+                  color: theme.cardColor, // Sesuaikan dengan tema
+                  borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5), // Warna shadow
+                      color: theme.shadowColor, // Sesuaikan dengan tema
                       spreadRadius: 1,
                       blurRadius: 5,
-                      offset: const Offset(0, 2), // Posisi shadow
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -118,8 +114,9 @@ class CardDetailView extends StatelessWidget {
                           controller.locationAddress.isNotEmpty
                               ? controller.locationAddress.value
                               : 'Tap untuk mendapatkan lokasi tujuan',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -127,23 +124,20 @@ class CardDetailView extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 10),
-
             GestureDetector(
-              onTap: controller
-                  .getUserGeocoding, // Panggil fungsi geocoding pengguna
+              onTap: controller.getUserGeocoding,
               child: Container(
-                padding: const EdgeInsets.all(12.0), // Jarak di dalam box
+                padding: const EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
-                  color: Colors.white, // Warna latar belakang box
-                  borderRadius: BorderRadius.circular(10), // Sudut membulat
+                  color: theme.cardColor, // Sesuaikan dengan tema
+                  borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5), // Warna shadow
+                      color: theme.shadowColor, // Sesuaikan dengan tema
                       spreadRadius: 1,
                       blurRadius: 5,
-                      offset: const Offset(0, 2), // Posisi shadow
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -157,8 +151,9 @@ class CardDetailView extends StatelessWidget {
                           controller.userAddress.isNotEmpty
                               ? controller.userAddress.value
                               : 'Tap untuk mendapatkan lokasi Anda',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -166,20 +161,18 @@ class CardDetailView extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 10),
-
             Container(
-              padding: const EdgeInsets.all(12.0), // Jarak di dalam box
+              padding: const EdgeInsets.all(12.0),
               decoration: BoxDecoration(
-                color: Colors.white, // Warna latar belakang box
-                borderRadius: BorderRadius.circular(10), // Sudut membulat
+                color: theme.cardColor, // Sesuaikan dengan tema
+                borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.5), // Warna shadow
+                    color: theme.shadowColor, // Sesuaikan dengan tema
                     spreadRadius: 1,
                     blurRadius: 5,
-                    offset: const Offset(0, 2), // Posisi shadow
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
@@ -193,15 +186,15 @@ class CardDetailView extends StatelessWidget {
                         controller.distanceBetweenLocation.isNotEmpty
                             ? controller.distanceBetweenLocation.value
                             : 'Jarak lokasi',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-
             const Divider(
               thickness: 3,
               height: 20,
@@ -209,22 +202,18 @@ class CardDetailView extends StatelessWidget {
               endIndent: 10,
               color: Colors.orangeAccent,
             ),
-
-            // Tombol untuk mendapatkan lokasi dan menghitung jarak
             Center(
               child: Container(
-                padding: const EdgeInsets.all(
-                    8.0), // Memberikan jarak di sekitar tombol
+                padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
-                  color: Colors.white, // Warna latar belakang container
-                  borderRadius:
-                      BorderRadius.circular(12), // Membuat sudut membulat
+                  color: theme.cardColor, // Sesuaikan dengan tema
+                  borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5), // Warna shadow
+                      color: theme.shadowColor, // Sesuaikan dengan tema
                       spreadRadius: 2,
                       blurRadius: 6,
-                      offset: const Offset(0, 3), // Posisi shadow
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
@@ -232,25 +221,22 @@ class CardDetailView extends StatelessWidget {
                   icon: const Icon(
                     Icons.map_rounded,
                     color: Colors.white,
-                    size: 20, // Ukuran ikon
+                    size: 20,
                   ),
                   onPressed: () => controller.getDistanceLocation(context),
                   label: const Text(
                     'Jarak ke lokasi',
-                    style: TextStyle(fontSize: 16), // Ukuran teks
+                    style: TextStyle(fontSize: 16),
                   ),
                   style: ButtonStyle(
-                    backgroundColor: const WidgetStatePropertyAll(
-                        Colors.blue), // Warna latar belakang tombol
-                    foregroundColor: const WidgetStatePropertyAll(
-                        Colors.white), // Warna teks tombol
-                    padding: const WidgetStatePropertyAll(
-                      EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                    backgroundColor: WidgetStateProperty.all(theme.primaryColor),
+                    foregroundColor: WidgetStateProperty.all(Colors.white),
+                    padding: WidgetStateProperty.all(
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                     ),
-                    shape: WidgetStatePropertyAll(
+                    shape: WidgetStateProperty.all(
                       RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            8), // Membulatkan sudut tombol
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                   ),

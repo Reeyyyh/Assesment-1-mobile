@@ -9,7 +9,7 @@ class RegisterController extends GetxController {
   final passwordController = TextEditingController();
   final nameController = TextEditingController();
 
-  var isPasswordVisible = false.obs; // Variabel untuk visibilitas password
+  var isPasswordVisible = false.obs;
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;

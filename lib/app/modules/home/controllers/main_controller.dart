@@ -35,6 +35,8 @@ class MainController extends GetxController {
     });
   }
 
+  // Todo : Bottom Navigation part
+
   void updateSelectedIndex(int index) {
     selectedIndex.value = index;
   }

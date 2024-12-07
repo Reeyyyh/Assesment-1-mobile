@@ -10,13 +10,15 @@ class RegisterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context); // Ambil tema aktif
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor, // Sesuaikan dengan tema
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        title: const Text(
+        backgroundColor: theme.primaryColor, // Sesuaikan dengan tema
+        title: Text(
           'Register',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: theme.appBarTheme.titleTextStyle, // Sesuaikan dengan tema
         ),
         centerTitle: true,
         elevation: 0,
@@ -26,29 +28,26 @@ class RegisterView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               "Create Account",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
+                color: theme.primaryColor, // Sesuaikan dengan tema
               ),
             ),
             const SizedBox(height: 10),
-            const Text(
+            Text(
               "Register to continue",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
             ),
             const SizedBox(height: 40),
             TextField(
               controller: registerController.nameController,
               decoration: InputDecoration(
                 labelText: 'Nama',
-                prefixIcon: const Icon(Icons.person, color: Colors.blueAccent),
+                prefixIcon: Icon(Icons.person, color: theme.primaryColor), // Sesuaikan dengan tema
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -59,7 +58,7 @@ class RegisterView extends StatelessWidget {
               controller: registerController.emailController,
               decoration: InputDecoration(
                 labelText: 'Email',
-                prefixIcon: const Icon(Icons.email, color: Colors.blueAccent),
+                prefixIcon: Icon(Icons.email, color: theme.primaryColor), // Sesuaikan dengan tema
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -71,14 +70,14 @@ class RegisterView extends StatelessWidget {
               obscureText: !registerController.isPasswordVisible.value,
               decoration: InputDecoration(
                 labelText: 'Password',
-                prefixIcon: const Icon(Icons.lock, color: Colors.blueAccent),
+                prefixIcon: Icon(Icons.lock, color: theme.primaryColor), // Sesuaikan dengan tema
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 suffixIcon: IconButton(
                   icon: Icon(
                     registerController.isPasswordVisible.value ? Icons.visibility : Icons.visibility_off,
-                    color: Colors.blueAccent,
+                    color: theme.primaryColor, // Sesuaikan dengan tema
                   ),
                   onPressed: () {
                     registerController.togglePasswordVisibility();
@@ -89,7 +88,7 @@ class RegisterView extends StatelessWidget {
             const SizedBox(height: 40),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
+                backgroundColor: theme.primaryColor, // Sesuaikan dengan tema
                 minimumSize: const Size.fromHeight(50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -98,9 +97,9 @@ class RegisterView extends StatelessWidget {
               onPressed: () {
                 registerController.register();
               },
-              child: const Text(
+              child: Text(
                 'Register',
-                style: TextStyle(
+                style: theme.textTheme.bodyLarge?.copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -108,21 +107,26 @@ class RegisterView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   "Already have an account? ",
-                  style: TextStyle(fontSize: 16),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey,
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
                     Get.off(() => LoginView());
                   },
-                  child: const Text(
+                  child: Text(
                     'Login',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueAccent),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: theme.primaryColor, // Sesuaikan dengan tema
+                    ),
                   ),
                 ),
               ],
