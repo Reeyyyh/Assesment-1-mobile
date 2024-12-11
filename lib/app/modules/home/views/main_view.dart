@@ -31,8 +31,12 @@ class MainPage extends StatelessWidget {
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
     Color primaryColor = themeController.isDarkTheme.value
-        ? Colors.blueAccent
+        ? Colors.white
         : Colors.green;
+
+    Color secondColor = themeController.isDarkTheme.value
+        ? Colors.black
+        : Colors.white;
 
     return [
       PersistentBottomNavBarItem(
@@ -48,7 +52,7 @@ class MainPage extends StatelessWidget {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.qrcode_viewfinder, color: Colors.white),
+        icon: Icon(CupertinoIcons.qrcode_viewfinder, color: secondColor),
         title: "QR Scan",
         activeColorPrimary: primaryColor,
         inactiveColorPrimary: Colors.grey,
@@ -86,7 +90,7 @@ class MainPage extends StatelessWidget {
           controller.updateSelectedIndex(index);
         },
         confineToSafeArea: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,
         stateManagement: false,

@@ -72,7 +72,7 @@ class HomeView extends StatelessWidget {
                   IconButton(
                     icon: Icon(
                       Icons.mic,
-                      color: theme.primaryColor, // Sesuaikan dengan tema
+                      color: theme.iconTheme.color,
                     ),
                     onPressed: () async {
                       bool available = await _speech.initialize();
