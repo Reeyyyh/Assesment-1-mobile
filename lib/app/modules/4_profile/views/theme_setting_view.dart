@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hotel_app/app/data/services/app_theme_controller.dart';
+import 'package:hotel_app/app/data/themes/app_theme_controller.dart';
 
 class ThemeSettingsView extends StatelessWidget {
   const ThemeSettingsView({super.key});

@@ -1,14 +1,14 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:hotel_app/app/data/models/app_theme.dart';
+import 'package:hotel_app/app/data/themes/app_theme.dart';
 
 class ThemeController extends GetxController {
   final GetStorage _storage = GetStorage();
   RxBool isDarkTheme = false.obs;
 
   ThemeController() {
-    // Ambil preferensi tema yang disimpan di GetStorage
+    // preferensi tema yang disimpan di GetStorage
     isDarkTheme.value = _storage.read('isDarkTheme') ?? false;
   }
 

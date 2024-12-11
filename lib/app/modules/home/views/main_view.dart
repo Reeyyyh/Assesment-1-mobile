@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hotel_app/app/data/services/app_theme_controller.dart';
+import 'package:hotel_app/app/data/themes/app_theme_controller.dart';
 import 'package:hotel_app/app/modules/1_home/views/home_view.dart';
 import 'package:hotel_app/app/modules/2_tripplan/views/tripplan_view.dart';
 import 'package:hotel_app/app/modules/3_favorite/views/favorite_view.dart';
@@ -73,8 +73,8 @@ class MainPage extends StatelessWidget {
     final MainController controller = Get.put(MainController());
 
     Color shadowColor = themeController.isDarkTheme.value
-        ? const Color.fromARGB(255, 199, 191, 191).withOpacity(0.3)  // Warna shadow untuk tema gelap
-        : Colors.grey.withOpacity(0.3);  // Warna shadow untuk tema terang
+        ? const Color.fromARGB(255, 255, 255, 255).withOpacity(0.3) // dark theme
+        : const Color.fromARGB(255, 0, 0, 0).withOpacity(0.3);  // light theme
 
     return Obx(() {
       return PersistentTabView(
