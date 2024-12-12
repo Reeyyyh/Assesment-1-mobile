@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/app/modules/1_home/controllers/card_detail_controller.dart';
 
@@ -10,7 +11,7 @@ class CardDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(CardDetailController(hotel));
-    final theme = Theme.of(context); // Menggunakan tema yang sama
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +70,7 @@ class CardDetailView extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
-                  color: theme.cardColor, // Sesuaikan dengan tema
+                  color: theme.cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -81,95 +82,15 @@ class CardDetailView extends StatelessWidget {
                 ),
               ),
             ),
-            const Divider(
-              thickness: 3,
-              height: 20,
-              indent: 10,
-              endIndent: 10,
-              color: Colors.orangeAccent,
-            ),
-            GestureDetector(
-              onTap: controller.getHotelGeocoding,
-              child: Container(
-                padding: const EdgeInsets.all(12.0),
-                decoration: BoxDecoration(
-                  color: theme.cardColor, // Sesuaikan dengan tema
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme.shadowColor, // Sesuaikan dengan tema
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.location_on, color: Colors.red),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Obx(
-                        () => Text(
-                          controller.locationAddress.isNotEmpty
-                              ? controller.locationAddress.value
-                              : 'Tap untuk mendapatkan lokasi tujuan',
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            GestureDetector(
-              onTap: controller.getUserGeocoding,
-              child: Container(
-                padding: const EdgeInsets.all(12.0),
-                decoration: BoxDecoration(
-                  color: theme.cardColor, // Sesuaikan dengan tema
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme.shadowColor, // Sesuaikan dengan tema
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.my_location, color: Colors.blue),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Obx(
-                        () => Text(
-                          controller.userAddress.isNotEmpty
-                              ? controller.userAddress.value
-                              : 'Tap untuk mendapatkan lokasi Anda',
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(12.0),
               decoration: BoxDecoration(
-                color: theme.cardColor, // Sesuaikan dengan tema
+                color: theme.cardColor,
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                    color: theme.shadowColor, // Sesuaikan dengan tema
+                    color: theme.shadowColor,
                     spreadRadius: 1,
                     blurRadius: 5,
                     offset: const Offset(0, 2),
@@ -178,66 +99,117 @@ class CardDetailView extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.explore, color: Colors.blue),
+                  const Icon(Icons.location_on, color: Colors.red),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Obx(
-                      () => Text(
-                        controller.distanceBetweenLocation.isNotEmpty
-                            ? controller.distanceBetweenLocation.value
-                            : 'Jarak lokasi',
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      () => controller.locationAddress.isEmpty
+                          ? const Center(child: CircularProgressIndicator())
+                          : Text(
+                              controller.locationAddress.value,
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                     ),
                   ),
                 ],
               ),
             ),
-            const Divider(
-              thickness: 3,
-              height: 20,
-              indent: 10,
-              endIndent: 10,
-              color: Colors.orangeAccent,
+            const SizedBox(height: 12),
+            GestureDetector(
+              onTap: () async {
+                await controller.getUserGeocoding();
+              },
+              child: Obx(
+                () {
+                  if (controller.isLoading.value) {
+                    return Container(
+                      padding: const EdgeInsets.all(12.0),
+                      decoration: BoxDecoration(
+                        color: theme.cardColor,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.shadowColor,
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  } else {
+                    return Container(
+                      padding: const EdgeInsets.all(12.0),
+                      decoration: BoxDecoration(
+                        color: theme.cardColor,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.shadowColor,
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.my_location, color: Colors.blue),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              controller.userAddress.value.isNotEmpty
+                                  ? controller.userAddress.value
+                                  : 'Ketuk untuk mendapatkan lokasi Anda',
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: controller.isError.value
+                                    ? Colors.red
+                                    : null,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+              ),
             ),
-            Center(
+            const SizedBox(height: 12),
+            GestureDetector(
+              onTap: () async {
+                final Position position = await Geolocator.getCurrentPosition(
+                    desiredAccuracy: LocationAccuracy.high);
+                controller.openRouteInGoogleMaps(
+                    position.latitude, position.longitude);
+              },
               child: Container(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 12.0, horizontal: 20.0),
                 decoration: BoxDecoration(
-                  color: theme.cardColor, // Sesuaikan dengan tema
-                  borderRadius: BorderRadius.circular(12),
+                  color: theme.colorScheme.primary,
+                  borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: theme.shadowColor, // Sesuaikan dengan tema
+                      color: theme.shadowColor.withOpacity(0.3),
                       spreadRadius: 2,
-                      blurRadius: 6,
-                      offset: const Offset(0, 3),
+                      blurRadius: 5,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
-                child: ElevatedButton.icon(
-                  icon: const Icon(
-                    Icons.map_rounded,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                  onPressed: () => controller.getDistanceLocation(context),
-                  label: const Text(
-                    'Jarak ke lokasi',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(theme.primaryColor),
-                    foregroundColor: WidgetStateProperty.all(Colors.white),
-                    padding: WidgetStateProperty.all(
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                    ),
-                    shape: WidgetStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                child: Center(
+                  child: Text(
+                    'Tampilkan Rute ke Hotel',
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white, // Menyesuaikan warna teks dengan tema
                     ),
                   ),
                 ),

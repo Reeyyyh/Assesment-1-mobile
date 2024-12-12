@@ -6,176 +6,139 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CardDetailController extends GetxController {
   final Map<String, dynamic> hotel;
-  // Reactive address variable
   var locationAddress = ''.obs;
   var userAddress = ''.obs;
   var distanceBetweenLocation = ''.obs;
-
-
-  @override
-  void onInit() {
-    getHotelGeocoding();
-    getUserGeocoding();
-    super.onInit();
-  }
+  var isLoading = false.obs;
+  var isError = false.obs;
 
   CardDetailController(this.hotel);
 
-  
-  // Fungsi untuk membuka Google Maps ke lokasi hotel
+  @override
+  void onInit() {
+    super.onInit();
+    getHotelGeocoding(); // Mendapatkan lokasi hotel
+  }
+
+  // Fungsi untuk mendapatkan alamat hotel dari Firebase
   Future<void> getHotelGeocoding() async {
     final double? latitude = hotel['latitude'];
     final double? longitude = hotel['longitude'];
 
     if (latitude != null && longitude != null) {
       try {
-        // Melakukan reverse geocoding untuk mendapatkan alamat dari koordinat
         List<Placemark> placemarks =
             await placemarkFromCoordinates(latitude, longitude);
-        Placemark place = placemarks.first; // Ambil alamat pertama
-
-        // Ambil nama alamat dan simpan di reactive variable
+        Placemark place = placemarks.first;
         locationAddress.value =
             '${place.name}, ${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}, ${place.postalCode}';
-
-        // Menampilkan Google Maps
-      //   final Uri url = Uri.parse(
-      //       'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
-      //   if (await canLaunchUrl(url)) {
-      //     await launchUrl(url);
-      //     print("Maps opened with location: ${locationAddress.value}");
-      //   } else {
-      //     Get.snackbar(
-      //       'Error',
-      //       'Could not open Google Maps.',
-      //       backgroundColor: Colors.red,
-      //       colorText: Colors.white,
-      //     );
-      //   }
-
+        isError.value = false;
       } catch (e) {
-        Get.snackbar(
-          'Error',
-          'Failed to get address: $e',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        locationAddress.value = 'Gagal mendapatkan alamat hotel';
+        isError.value = true;
       }
     } else {
-      Get.snackbar(
-        'Error',
-        'Location data tidak tersedia.',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+      locationAddress.value = 'Data lokasi hotel tidak tersedia';
+      isError.value = true;
+    }
+  }
+
+  // Fungsi untuk mendapatkan lokasi pengguna
+  Future<void> getUserGeocoding() async {
+    isLoading.value = true; // Aktifkan loading
+    try {
+      // Cek apakah layanan lokasi aktif
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        userAddress.value =
+            'Layanan lokasi dinonaktifkan. Aktifkan layanan lokasi untuk melanjutkan.';
+        isError.value = true;
+        return;
+      }
+
+      // Cek izin lokasi
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          userAddress.value =
+              'Izin lokasi ditolak. Harap izinkan lokasi untuk melanjutkan.';
+          isError.value = true;
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        userAddress.value =
+            'Izin lokasi ditolak secara permanen. Harap aktifkan izin di pengaturan perangkat.';
+        isError.value = true;
+        return;
+      }
+
+      // Dapatkan lokasi pengguna
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
       );
+
+      // Konversi koordinat ke alamat
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+      Placemark place = placemarks.first;
+
+      userAddress.value = '${place.name}, ${place.street}, ${place.locality}, '
+          '${place.administrativeArea}, ${place.country}, ${place.postalCode}';
+      isError.value = false; // Tidak ada error
+    } catch (e) {
+      userAddress.value = 'Gagal mendapatkan lokasi pengguna.';
+      isError.value = true; // Set status error
+    } finally {
+      isLoading.value = false; // Matikan loading
     }
   }
 
+  // Fungsi untuk menghitung jarak antara lokasi pengguna dan hotel
+  // Future<void> getDistanceLocation() async {
+  //   try {
+  //     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //     if (!serviceEnabled) {
+  //       distanceBetweenLocation.value = 'Layanan lokasi dinonaktifkan';
+  //       isError.value = true;
+  //       return;
+  //     }
 
-Future<void> getUserGeocoding() async {
-  try {
-    bool serviceEnabled;
-    LocationPermission permission;
+  //     LocationPermission permission = await Geolocator.checkPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       permission = await Geolocator.requestPermission();
+  //       if (permission == LocationPermission.denied) {
+  //         distanceBetweenLocation.value = 'Izin lokasi ditolak';
+  //         isError.value = true;
+  //         return;
+  //       }
+  //     }
 
-    // Cek layanan lokasi
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      Get.snackbar('Error', 'Location services are disabled.');
-      return;
-    }
+  //     Position position = await Geolocator.getCurrentPosition(
+  //         desiredAccuracy: LocationAccuracy.high);
+  //     final double? latitude = hotel['latitude'];
+  //     final double? longitude = hotel['longitude'];
 
-    // Cek dan minta izin lokasi
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        Get.snackbar('Error', 'Location permission denied.');
-        return;
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      Get.snackbar(
-          'Error', 'Location permission permanently denied. Please enable it.');
-      return;
-    }
-
-    // Ambil lokasi pengguna
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    // Lakukan reverse geocoding
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    Placemark place = placemarks.first;
-
-    // Simpan alamat pengguna ke dalam reactive variable
-    userAddress.value =
-        '${place.name}, ${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}, ${place.postalCode}';
-
-    // Buka lokasi di Google Maps
-    // String googleMapsUrl =
-    //     'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}';
-
-    // if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
-    //   await launchUrl(Uri.parse(googleMapsUrl),
-    //       mode: LaunchMode.externalApplication); // Pastikan buka aplikasi eksternal
-    // } else {
-    //   throw 'Could not open the map.';
-    // }
-  } catch (e) {
-    Get.snackbar(
-      'Error',
-      'Failed to get user location: $e',
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-    );
-  }
-}
-
-  // Fungsi untuk mendapatkan lokasi pengguna dan menghitung jarak
-  Future<void> getDistanceLocation(BuildContext context) async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Cek apakah layanan lokasi aktif
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      Get.snackbar('disabled', 'Location services are disabled.');
-      return;
-    }
-
-    // Cek izin lokasi
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        Get.snackbar('denied', 'Location permission denied.');
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      Get.snackbar('denied', 'Location permission permanently denied.');
-      return;
-    }
-
-    // Dapatkan lokasi pengguna
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    // Hitung jarak antara lokasi pengguna dan hotel
-    double distance = Geolocator.distanceBetween(
-      position.latitude,
-      position.longitude,
-      hotel['latitude'],
-      hotel['longitude'],
-    );
-
-    distanceBetweenLocation.value = 'Jarak ke lokasi ${distance.toStringAsFixed(2)} meter';
-
-    // Buka rute Google Maps dari pengguna ke hotel
-    openRouteInGoogleMaps(position.latitude, position.longitude);
-  }
+  //     if (latitude != null && longitude != null) {
+  //       double distanceInMeters = Geolocator.distanceBetween(
+  //           position.latitude, position.longitude, latitude, longitude);
+  //       double distanceInKilometers = distanceInMeters / 1000;
+  //       distanceBetweenLocation.value =
+  //           '${distanceInKilometers.toStringAsFixed(2)} km';
+  //       isError.value = false;
+  //     } else {
+  //       distanceBetweenLocation.value = 'Data lokasi hotel tidak tersedia';
+  //       isError.value = true;
+  //     }
+  //   } catch (e) {
+  //     distanceBetweenLocation.value = 'Gagal mendapatkan jarak ke lokasi';
+  //     isError.value = true;
+  //   }
+  // }
 
   // Fungsi untuk membuka Google Maps dengan rute dari pengguna ke hotel
   Future<void> openRouteInGoogleMaps(
