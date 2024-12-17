@@ -2,19 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:hotel_app/app/data/connections/controllers/connectivity_controller.dart';
 import 'package:hotel_app/app/modules/Aunt/views/login_view.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ProfileController extends GetxController {
   var imagePath = ''.obs;
   var userName = ''.obs;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  
   final ImagePicker _picker = ImagePicker();
-
-  // Inisialisasi flutter_tts
   final FlutterTts flutterTts = FlutterTts();
+  final box = GetStorage(); // Menyimpan data lokal
+
+  final ConnectivityController connectivityController =
+      Get.find<ConnectivityController>(); // Mengakses ConnectivityController
 
   // Fungsi untuk mengucapkan teks menggunakan TTS
   Future<void> _speak(String text) async {
@@ -43,17 +46,20 @@ class ProfileController extends GetxController {
     }
   }
 
-  // Fungsi untuk memutar sapaan secara manual
-  Future<void> speakHello() async {
-    if (userName.value.isNotEmpty) {
-      await _speak("Hello, ${userName.value}");
+  // Fungsi untuk menyimpan foto profil ke Firestore atau ke lokal
+  Future<void> _saveProfilePicture() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      if (!connectivityController.isOffline.value) {
+        // Jika online, simpan ke Firebase
+        await _firestore.collection('users').doc(user.uid).update({
+          'profilePicture': imagePath.value,
+        });
+      } else {
+        // Jika offline, simpan ke lokal
+        box.write('profilePicture', imagePath.value);
+      }
     }
-  }
-
-  // Fungsi untuk logout
-  void logOut() async {
-    await _auth.signOut();
-    Get.offAll(LoginView());
   }
 
   // Fungsi untuk memilih gambar profil
@@ -62,16 +68,6 @@ class ProfileController extends GetxController {
     if (pickedFile != null) {
       imagePath.value = pickedFile.path;
       await _saveProfilePicture();
-    }
-  }
-
-  // Fungsi untuk menyimpan foto profil ke Firestore
-  Future<void> _saveProfilePicture() async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      await _firestore.collection('users').doc(user.uid).update({
-        'profilePicture': imagePath.value,
-      });
     }
   }
 
@@ -86,14 +82,46 @@ class ProfileController extends GetxController {
     }
   }
 
-  // Fungsi untuk mengupdate nama pengguna
+  // Fungsi untuk mengupdate nama pengguna ke Firebase atau lokal
   Future<void> updateUserName(String newName) async {
     User? user = _auth.currentUser;
     if (user != null) {
-      await _firestore.collection('users').doc(user.uid).update({
-        'namaUser': newName,
-      });
+      if (!connectivityController.isOffline.value) {
+        // Jika online, simpan ke Firebase
+        print("menu profile online");
+        await _firestore.collection('users').doc(user.uid).update({
+          'namaUser': newName,
+        });
+      } else {
+        // Jika offline, simpan ke lokal
+        print("menu profile offline");
+        box.write('userName', newName);
+      }
       userName.value = newName;
+    }
+  }
+
+  // Fungsi untuk logout
+  void logOut() async {
+    await _auth.signOut();
+    Get.offAll(LoginView());
+  }
+
+  void syncLocalDataToFirebase() async {
+    if (!connectivityController.isOffline.value) {
+      print("local data online");
+      // Cek jika koneksi online dan ada data lokal yang perlu disinkronkan
+      if (box.read('userName') != null) {
+        String? name = box.read('userName');
+
+        User? user = _auth.currentUser;
+        if (user != null) {
+          // Sinkronisasi data lokal ke Firebase
+          await _firestore.collection('users').doc(user.uid).update({
+            'namaUser': name,
+          });
+        }
+      }
     }
   }
 
@@ -101,5 +129,12 @@ class ProfileController extends GetxController {
   void onInit() {
     super.onInit();
     fetchUserName();
+    // Memantau perubahan status koneksi
+    connectivityController.isOffline.listen((isOffline) {
+      if (!isOffline) {
+        // Jika kembali online, sinkronisasi data lokal ke Firebase
+        syncLocalDataToFirebase();
+      }
+    });
   }
 }

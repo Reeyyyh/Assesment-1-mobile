@@ -68,7 +68,7 @@ class EditProfileView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.surfaceVariant, // Menggunakan colorScheme untuk fillColor
+                fillColor: Theme.of(context).colorScheme.surfaceContainerHighest, // Menggunakan colorScheme untuk fillColor
               ),
             ),
             const SizedBox(height: 20),
