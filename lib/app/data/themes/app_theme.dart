@@ -35,7 +35,7 @@ class AppTheme {
 
   // Dark Theme
   static final ThemeData darkTheme = ThemeData(
-    primaryColor: const Color(0xFF0056B3),
+    primaryColor: const Color.fromARGB(255, 48, 141, 240),
     hintColor: const Color(0xFFFF5722),
     scaffoldBackgroundColor: const Color.fromARGB(255, 48, 46, 46),
     iconTheme: const IconThemeData(
