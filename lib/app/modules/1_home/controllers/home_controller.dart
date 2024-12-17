@@ -10,7 +10,8 @@ class HomeController extends GetxController {
   var filteredHotelList = [].obs;
   var isLoading = true.obs; // Status loading
 
-  final ConnectivityController connectivityController = Get.find<ConnectivityController>();
+  final ConnectivityController connectivityController =
+      Get.find<ConnectivityController>();
 
   // Real-time listener for Firestore
   void fetchHotelsRealtime() {
@@ -35,6 +36,8 @@ class HomeController extends GetxController {
       var location = hotel['location']?.toLowerCase() ?? '';
       return location.contains(query);
     }).toList();
+
+    print('Jumlah hasil filter: ${filteredHotelList.length}'); // Debugging hasil filter
   }
 
   // Manual refresh function
@@ -56,7 +59,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     fetchHotelsRealtime();
-    
+
     connectivityController.isOffline.listen((isOffline) async {
       if (!isOffline) {
         // Jika online, tambahkan delay 1 detik dan kemudian refresh data
