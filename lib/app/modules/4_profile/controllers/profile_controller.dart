@@ -10,6 +10,7 @@ class ProfileController extends GetxController {
   var userName = ''.obs;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  
   final ImagePicker _picker = ImagePicker();
 
   // Inisialisasi flutter_tts

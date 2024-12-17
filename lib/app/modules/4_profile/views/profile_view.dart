@@ -113,24 +113,25 @@ class ProfileView extends StatelessWidget {
                               .black, // Jika tema terang, gunakan warna hitam
                     ),
               ),
-              const SizedBox(height: 10),
-              ElevatedButton.icon(
-                onPressed: () {
-                  controller.speakHello();
-                },
-                icon: const Icon(
-                  Icons.volume_up,
-                  color: Colors.white,
-                ),
-                label: const Text(
-                  "Play Greeting",
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
-                ),
-              ),
-              const SizedBox(height: 30),
+
+              // const SizedBox(height: 10),
+              // ElevatedButton.icon(
+              //   onPressed: () {
+              //     controller.speakHello();
+              //   },
+              //   icon: const Icon(
+              //     Icons.volume_up,
+              //     color: Colors.white,
+              //   ),
+              //   label: const Text(
+              //     "Play Greeting",
+              //     style: TextStyle(color: Colors.white),
+              //   ),
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: Theme.of(context).primaryColor,
+              //   ),
+              // ),
+              const SizedBox(height: 80),
 
               // Menu Pengaturan
               ListTile(
