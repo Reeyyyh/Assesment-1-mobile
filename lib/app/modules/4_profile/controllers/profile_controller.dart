@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/app/data/connections/controllers/connectivity_controller.dart';
@@ -109,8 +110,9 @@ class ProfileController extends GetxController {
 
   void syncLocalDataToFirebase() async {
     if (!connectivityController.isOffline.value) {
-      print("local data online");
-      // Cek jika koneksi online dan ada data lokal yang perlu disinkronkan
+      print("Local data online");
+
+      // Cek jika ada data lokal yang perlu disinkronkan
       if (box.read('userName') != null) {
         String? name = box.read('userName');
 
@@ -120,6 +122,16 @@ class ProfileController extends GetxController {
           await _firestore.collection('users').doc(user.uid).update({
             'namaUser': name,
           });
+
+          // Tampilkan snackbar setelah data berhasil disinkronkan
+          Get.snackbar(
+            "Data Sinkronisasi",
+            "Data Anda telah berhasil disinkronkan ke server.",
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+            duration: const Duration(seconds: 3),
+          );
         }
       }
     }
@@ -132,7 +144,6 @@ class ProfileController extends GetxController {
     // Memantau perubahan status koneksi
     connectivityController.isOffline.listen((isOffline) {
       if (!isOffline) {
-        // Jika kembali online, sinkronisasi data lokal ke Firebase
         syncLocalDataToFirebase();
       }
     });

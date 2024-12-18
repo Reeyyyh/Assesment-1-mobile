@@ -79,9 +79,22 @@ class EditProfileView extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () async {
-                      await controller.updateUserName(nameController.text);
-                      Get.back();
-                    },
+  bool isOffline = controller.connectivityController.isOffline.value;
+  await controller.updateUserName(nameController.text);
+  Get.back(); // Menutup layar
+  Future.delayed(const Duration(milliseconds: 200), () {
+    Get.snackbar(
+      isOffline ? "Offline Mode" : "Update Berhasil",
+      isOffline
+          ? "Koneksi internet tidak tersedia. Data Anda disimpan secara lokal."
+          : "Nama pengguna berhasil diperbarui secara online.",
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: isOffline ? Colors.orange : Colors.green,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 3),
+    );
+  });
+},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary, // Menggunakan colorScheme.primary
                       padding: const EdgeInsets.symmetric(vertical: 15),
