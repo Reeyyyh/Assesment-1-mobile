@@ -10,7 +10,8 @@ class EditProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController nameController = TextEditingController(text: controller.userName.value);
+    final TextEditingController nameController =
+        TextEditingController(text: controller.userName.value);
 
     return Scaffold(
       appBar: PreferredSize(
@@ -18,16 +19,8 @@ class EditProfileView extends StatelessWidget {
         child: ClipPath(
           clipper: CustomAppBarClipper(),
           child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).primaryColor, 
-                  Theme.of(context).colorScheme.secondary
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
+            // Menghapus gradient dan hanya menggunakan satu warna dari tema
+            color: Theme.of(context).primaryColor,
             child: AppBar(
               title: const Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -44,7 +37,8 @@ class EditProfileView extends StatelessWidget {
               ),
               centerTitle: true,
               elevation: 0,
-              backgroundColor: Colors.transparent,
+              backgroundColor:
+                  Colors.transparent, // Memastikan AppBar tetap transparan
             ),
           ),
         ),
@@ -59,7 +53,7 @@ class EditProfileView extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 20),
-            
+
             TextField(
               controller: nameController,
               decoration: InputDecoration(
@@ -69,7 +63,9 @@ class EditProfileView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.surfaceContainerHighest, // Menggunakan colorScheme untuk fillColor
+                fillColor: Theme.of(context)
+                    .colorScheme
+                    .surfaceContainerHighest, // Menggunakan colorScheme untuk fillColor
               ),
             ),
             const SizedBox(height: 20),
@@ -80,24 +76,28 @@ class EditProfileView extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () async {
-  bool isOffline = controller.connectivityController.isOffline.value;
-  await controller.updateUserName(nameController.text);
-  Get.back(); // Menutup layar
-  Future.delayed(const Duration(milliseconds: 200), () {
-    Get.snackbar(
-      isOffline ? "Offline Mode" : "Update Berhasil",
-      isOffline
-          ? "Koneksi internet tidak tersedia. Data Anda disimpan secara lokal."
-          : "Nama pengguna berhasil diperbarui secara online.",
-      snackPosition: SnackPosition.TOP,
-      backgroundColor: isOffline ? Colors.orange : Colors.green,
-      colorText: Colors.white,
-      duration: const Duration(seconds: 3),
-    );
-  });
-},
+                      bool isOffline =
+                          controller.connectivityController.isOffline.value;
+                      await controller.updateUserName(nameController.text);
+                      Get.back(); // Menutup layar
+                      Future.delayed(const Duration(milliseconds: 200), () {
+                        Get.snackbar(
+                          isOffline ? "Offline Mode" : "Update Berhasil",
+                          isOffline
+                              ? "Koneksi internet tidak tersedia. Data Anda disimpan secara lokal."
+                              : "Nama pengguna berhasil diperbarui secara online.",
+                          snackPosition: SnackPosition.TOP,
+                          backgroundColor:
+                              isOffline ? Colors.orange : Colors.green,
+                          colorText: Colors.white,
+                          duration: const Duration(seconds: 3),
+                        );
+                      });
+                    },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary, // Menggunakan colorScheme.primary
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .primary, // Menggunakan colorScheme.primary
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0),
@@ -105,7 +105,10 @@ class EditProfileView extends StatelessWidget {
                     ),
                     child: Text(
                       'Simpan',
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.white),
                     ),
                   ),
                 ),
@@ -117,21 +120,30 @@ class EditProfileView extends StatelessWidget {
                     },
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 15),
-                      backgroundColor: Theme.of(context).colorScheme.error.withOpacity(0.2), // Menggunakan colorScheme.error untuk background
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .error
+                          .withOpacity(
+                              0.2), // Menggunakan colorScheme.error untuk background
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
                     child: Text(
                       'Batal',
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.white),
                     ),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 20),
-            Divider(color: Theme.of(context).dividerColor, thickness: 1.5), // Menggunakan dividerColor dari tema
+            Divider(
+                color: Theme.of(context).dividerColor,
+                thickness: 1.5), // Menggunakan dividerColor dari tema
           ],
         ),
       ),

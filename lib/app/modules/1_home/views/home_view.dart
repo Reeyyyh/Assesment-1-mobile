@@ -130,38 +130,31 @@ class HomeView extends StatelessWidget {
     }
   }
 
-  PreferredSizeWidget _buildAppBar(ThemeData theme) {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(50.0),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(25.0),
-          bottomRight: Radius.circular(25.0),
-        ),
-        child: AppBar(
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [theme.primaryColor, theme.colorScheme.secondary],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
-          title: Text(
-            'Home',
-            style: theme.appBarTheme.titleTextStyle?.copyWith(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          centerTitle: true,
-          elevation: 0,
-        ),
+PreferredSizeWidget _buildAppBar(ThemeData theme) {
+  return PreferredSize(
+    preferredSize: const Size.fromHeight(50.0),
+    child: ClipRRect(
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(10.0),
+        bottomRight: Radius.circular(10.0),
       ),
-    );
-  }
+      child: AppBar(
+        backgroundColor: theme.primaryColor, // Menggunakan satu warna dari theme
+        title: Text(
+          'Home',
+          style: theme.appBarTheme.titleTextStyle?.copyWith(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        elevation: 0,
+      ),
+    ),
+  );
+}
+
 
   Widget _buildSearchBar(
       TextEditingController searchController, ThemeData theme) {

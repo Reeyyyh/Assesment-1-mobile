@@ -21,16 +21,7 @@ class QRScanView extends StatelessWidget {
         ),
         centerTitle: true,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).primaryColor, // Menggunakan primaryColor dari tema
-                Theme.of(context).colorScheme.secondary // Menggunakan secondaryColor dari tema
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
+          color: Theme.of(context).primaryColor,
         ),
         elevation: 5,
       ),

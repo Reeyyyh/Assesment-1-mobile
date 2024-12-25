@@ -18,19 +18,12 @@ class TripplanView extends StatelessWidget {
         preferredSize: const Size.fromHeight(50.0),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(25.0),
-            bottomRight: Radius.circular(25.0),
+            bottomLeft: Radius.circular(10.0),
+            bottomRight: Radius.circular(10.0),
           ),
           child: AppBar(
-            flexibleSpace: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [theme.primaryColor, theme.colorScheme.secondary], // Sesuaikan dengan tema
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-            ),
+            backgroundColor:
+                theme.primaryColor, // Menggunakan satu warna dari tema
             title: const Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -83,7 +76,8 @@ class TripplanView extends StatelessWidget {
                 title: news['title'],
                 description: news['description'] ?? 'No description available',
                 url: news['link'],
-                imageUrl: news['image_url'] ?? 'https://via.placeholder.com/150',
+                imageUrl:
+                    news['image_url'] ?? 'https://via.placeholder.com/150',
               );
             },
           );

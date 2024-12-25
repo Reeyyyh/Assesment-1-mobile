@@ -19,16 +19,7 @@ class ProfileView extends StatelessWidget {
         child: ClipPath(
           clipper: CustomAppBarClipper(),
           child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).primaryColor,
-                  Theme.of(context).colorScheme.secondary
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
+            color: Theme.of(context).primaryColor,
             child: AppBar(
               title: Text(
                 'Profile',
