@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: Get.find<ThemeController>().currentTheme,
-      title: 'Hotel App',
+      title: 'RoomMate',
       home: LoginView(),
     );
   }

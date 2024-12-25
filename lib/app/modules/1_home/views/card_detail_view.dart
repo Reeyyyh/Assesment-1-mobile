@@ -158,6 +158,7 @@ class _HotelInfo extends StatelessWidget {
         Center(
           child: Container(
             padding: const EdgeInsets.all(12.0),
+            width: double.infinity,
             decoration: BoxDecoration(
               color: theme.cardColor,
               borderRadius: BorderRadius.circular(10),

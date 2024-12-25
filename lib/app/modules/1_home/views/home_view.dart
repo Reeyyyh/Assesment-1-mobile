@@ -256,11 +256,12 @@ class HomeView extends StatelessWidget {
         },
         child: Card(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(30),
           ),
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(
               top: Radius.circular(10),
+              bottom: Radius.circular(30),
             ),
             child: Stack(
               fit: StackFit.expand,
