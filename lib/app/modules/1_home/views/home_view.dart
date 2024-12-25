@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/app/data/connections/controllers/connectivity_controller.dart';
@@ -7,7 +8,9 @@ import 'card_detail_view.dart';
 
 class HomeView extends StatelessWidget {
   final HomeController controller = Get.put(HomeController());
+
   final stt.SpeechToText _speech = stt.SpeechToText();
+
   final ConnectivityController connectivityController =
       Get.find<ConnectivityController>(); // Mengakses ConnectivityController
 
@@ -197,6 +200,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
+  // Jika daftar tidak kosong, tampilkan GridView
   Widget _buildHotelGrid(ThemeData tema) {
     // Periksa apakah daftar hotel yang sudah difilter kosong
     if (controller.filteredHotelList.isEmpty) {
@@ -237,94 +241,175 @@ class HomeView extends StatelessWidget {
     }
 
     // Jika daftar tidak kosong, tampilkan GridView
-    return GridView.builder(
-      padding: const EdgeInsets.all(10.0),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        childAspectRatio:
-            0.75, // Anda bisa menyesuaikan rasio ini jika diperlukan
-      ),
-      itemCount: controller.filteredHotelList.length,
-      itemBuilder: (context, index) {
-        final hotel = controller.filteredHotelList[index];
-        return GestureDetector(
-          onTap: () {
-            Get.to(() => CardDetailView(
-                hotel: hotel)); // Mengarah ke halaman detail hotel
-          },
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(10), // Membuat sudut card melengkung
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(
-                        10), // Sudut gambar hotel yang melengkung
+    return CustomScrollView(
+      slivers: [
+        // CarouselSlider wrapped in a SliverToBoxAdapter to make it scrollable
+        SliverToBoxAdapter(
+          child: CarouselSlider.builder(
+            itemCount: controller.filteredHotelList.length,
+            itemBuilder: (context, index, realIndex) {
+              final hotel = controller.filteredHotelList[index];
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() =>
+                      CardDetailView(hotel: hotel)); // Navigate to hotel detail
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Image.network(
-                    hotel['image'] ?? '', // Menampilkan gambar hotel
-                    fit: BoxFit
-                        .cover, // Mengatur gambar agar menutupi area dengan baik
-                    width: double.infinity,
-                    height: 120, // Menentukan tinggi gambar
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(10),
+                    ),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.network(
+                          hotel['image'] ?? '',
+                          fit: BoxFit.cover,
+                        ),
+                        // Overlay text on the image
+                        Positioned(
+                          left: 0,
+                          bottom: 0,
+                          child: Container(
+                            width: 400,
+                            padding: const EdgeInsets.all(8.0),
+                            color: Colors.black.withOpacity(
+                                0.5), // semi-transparent background
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  hotel['name'] ?? 'Tidak Dikenal',
+                                  style: tema.textTheme.bodyLarge?.copyWith(
+                                    fontSize: controller.imageFont,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white, // text color white
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.location_on,
+                                        color: Colors.white, size: 16),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      hotel['location'] ?? 'Tidak Dikenal',
+                                      style:
+                                          tema.textTheme.bodyMedium?.copyWith(
+                                        fontSize: controller.itemCategoryFont,
+                                        color: Colors.white, // text color white
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+              );
+            },
+            options: CarouselOptions(
+              height: 180,
+              viewportFraction: 1.0,
+              enlargeCenterPage: true,
+              autoPlay: true,
+            ),
+          ),
+        ),
+
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 20),
+        ),
+
+        // GridView wrapped in SliverGrid
+        SliverGrid(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final hotel = controller.filteredHotelList[index];
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => CardDetailView(hotel: hotel));
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        hotel['name'] ??
-                            'Tidak Dikenal', // Menampilkan nama hotel
-                        style: tema.textTheme.bodyLarge?.copyWith(
-                          fontSize: controller.imageFont,
-                          fontWeight: FontWeight.bold,
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(10),
+                        ),
+                        child: Image.network(
+                          hotel['image'] ?? '',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: 120,
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Icon(Icons.location_on,
-                              color: tema.colorScheme.error,
-                              size: 16), // Ikon lokasi
-                          const SizedBox(width: 4),
-                          Flexible(
-                            // Membuat teks lokasi lebih responsif
-                            child: Text(
-                              hotel['location'] ??
-                                  'Tidak Dikenal', // Menampilkan lokasi hotel
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              hotel['name'] ?? 'Tidak Dikenal',
+                              style: tema.textTheme.bodyLarge?.copyWith(
+                                fontSize: controller.imageFont,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                Icon(Icons.location_on,
+                                    color: tema.colorScheme.error, size: 16),
+                                const SizedBox(width: 4),
+                                Flexible(
+                                  child: Text(
+                                    hotel['location'] ?? 'Tidak Dikenal',
+                                    style: tema.textTheme.bodyMedium?.copyWith(
+                                      fontSize: controller.itemCategoryFont,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "Rp ${hotel['price'] ?? '0'}",
                               style: tema.textTheme.bodyMedium?.copyWith(
                                 fontSize: controller.itemCategoryFont,
+                                fontWeight: FontWeight.bold,
                               ),
-                              overflow: TextOverflow
-                                  .ellipsis, // Menangani teks yang panjang
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        "Rp ${hotel['price'] ?? '0'}", // Menampilkan harga hotel
-                        style: tema.textTheme.bodyMedium?.copyWith(
-                          fontSize: controller.itemCategoryFont,
-                          fontWeight: FontWeight.bold,
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              );
+            },
+            childCount: controller.filteredHotelList.length,
           ),
-        );
-      },
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 0.75,
+          ),
+        ),
+      ],
     );
   }
 }
