@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/app/data/connections/controllers/connectivity_controller.dart';
 import 'package:hotel_app/app/modules/1_home/widgets/offline_widget.dart';
+import 'package:hotel_app/app/modules/3_favorite/controllers/favorite_controller.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../controllers/home_controller.dart';
 import 'card_detail_view.dart';
@@ -340,16 +341,17 @@ class HomeView extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.all(1.5),
                               decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(
-                                    0.4), // Background color with transparency
-                                borderRadius: BorderRadius.circular(
-                                    12), // Rounded corners for the background
+                                color: Colors.black.withOpacity(0.4),
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               child: IconButton(
-                                icon: const Icon(Icons.favorite_border,
-                                    color: Colors.white),
+                                icon: const Icon(
+                                  Icons.favorite_border,
+                                  color: Colors.white,
+                                ),
                                 onPressed: () {
-                                  // Logika untuk menambahkan hotel ke favorit
+                                  Get.find<FavoriteController>()
+                                      .addToFavorites(hotel);
                                 },
                               ),
                             ),
