@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hotel_app/app/modules/Aunt/controllers/login_controller.dart';
 import 'package:hotel_app/app/modules/Aunt/views/register_view.dart';
 import 'package:hotel_app/app/data/connections/controllers/connectivity_controller.dart';
+import 'package:hotel_app/app/modules/components/custom/appBar.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
@@ -16,14 +17,30 @@ class LoginView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: theme.primaryColor,
-        title: Text(
-          'Login',
-          style: theme.appBarTheme.titleTextStyle,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(90.0),
+        child: Hero(
+          tag: 'appBarHero',
+          child: ClipPath(
+            clipper: CustomAppBarClipper(),
+            child: Container(
+              color: Theme.of(context).primaryColor,
+              child: AppBar(
+                title: Text(
+                  'Login',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                ),
+                centerTitle: true,
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+              ),
+            ),
+          ),
         ),
-        centerTitle: true,
-        elevation: 0,
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -158,7 +175,11 @@ class LoginView extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.off(() => RegisterView());
+                      Get.off(
+                        () => RegisterView(),
+                        transition: Transition.fadeIn,
+                        duration: const Duration(milliseconds: 400),
+                      );
                     },
                     child: Text(
                       'Register',

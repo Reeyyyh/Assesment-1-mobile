@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/app/modules/4_profile/views/edit_profile_view.dart';
 import 'package:hotel_app/app/modules/4_profile/views/theme_setting_view.dart';
+import 'package:hotel_app/app/modules/components/custom/appBar.dart';
 import '../controllers/profile_controller.dart';
 import 'dart:io';
 
@@ -164,20 +165,4 @@ class ProfileView extends StatelessWidget {
       }),
     );
   }
-}
-
-class CustomAppBarClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height - 30);
-    path.quadraticBezierTo(
-        size.width / 2, size.height, size.width, size.height - 30);
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

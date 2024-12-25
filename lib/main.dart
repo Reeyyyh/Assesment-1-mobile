@@ -12,13 +12,11 @@ void main() async {
   await GetStorage.init();
   Get.put(ThemeController());
   Get.put(ConnectivityController());
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  final ThemeController themeController = Get.put(ThemeController());
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

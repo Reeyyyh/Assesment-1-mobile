@@ -14,7 +14,7 @@ class LoginController extends GetxController {
       Get.snackbar("Error", "Email tidak boleh kosong.");
       return;
     }
-    
+
     if (passwordController.text.trim().isEmpty) {
       Get.snackbar("Error", "Password tidak boleh kosong.");
       return;
