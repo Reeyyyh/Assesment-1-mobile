@@ -20,30 +20,30 @@ class HomeView extends StatelessWidget {
 
     return Scaffold(
       appBar: _buildAppBar(theme),
-      body: Column(
-        children: [
-          _buildSearchBar(
-              searchController, theme), // Tetap tampilkan search bar
-          Expanded(
-            child: Obx(
-              () {
-                // Periksa status koneksi
-                if (connectivityController.isOffline.value) {
-                  // Jika offline, hanya tampilkan pesan offline di konten
-                  return _buildOfflineMessage(theme);
-                } else {
-                  // Ketika online, tampilkan daftar hotel
-                  return RefreshIndicator(
-                    onRefresh: controller.refreshData,
-                    child: controller.hotelList.isEmpty
+      body: RefreshIndicator(
+        onRefresh: controller.refreshData, // Fungsi untuk me-refresh data
+        child: Column(
+          children: [
+            _buildSearchBar(
+                searchController, theme), // Tetap tampilkan search bar
+            Expanded(
+              child: Obx(
+                () {
+                  // Periksa status koneksi
+                  if (connectivityController.isOffline.value) {
+                    // Jika offline, hanya tampilkan pesan offline di konten
+                    return _buildOfflineMessage(theme);
+                  } else {
+                    // Ketika online, tampilkan daftar hotel
+                    return controller.hotelList.isEmpty
                         ? _buildLoadingIndicator(theme)
-                        : _buildHotelGrid(theme),
-                  );
-                }
-              },
+                        : _buildHotelGrid(theme);
+                  }
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -130,31 +130,31 @@ class HomeView extends StatelessWidget {
     }
   }
 
-PreferredSizeWidget _buildAppBar(ThemeData theme) {
-  return PreferredSize(
-    preferredSize: const Size.fromHeight(50.0),
-    child: ClipRRect(
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(10.0),
-        bottomRight: Radius.circular(10.0),
-      ),
-      child: AppBar(
-        backgroundColor: theme.primaryColor, // Menggunakan satu warna dari theme
-        title: Text(
-          'Home',
-          style: theme.appBarTheme.titleTextStyle?.copyWith(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+  PreferredSizeWidget _buildAppBar(ThemeData theme) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(50.0),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(10.0),
+          bottomRight: Radius.circular(10.0),
         ),
-        centerTitle: true,
-        elevation: 0,
+        child: AppBar(
+          backgroundColor:
+              theme.primaryColor, // Menggunakan satu warna dari theme
+          title: Text(
+            'Home',
+            style: theme.appBarTheme.titleTextStyle?.copyWith(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          centerTitle: true,
+          elevation: 0,
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildSearchBar(
       TextEditingController searchController, ThemeData theme) {
