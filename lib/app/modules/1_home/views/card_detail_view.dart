@@ -119,14 +119,38 @@ class _HotelImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Image.network(
-        hotel['image'] ?? '',
-        width: double.infinity,
-        height: 200,
-        fit: BoxFit.cover,
-      ),
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.network(
+            hotel['image'] ?? '',
+            width: double.infinity,
+            height: 200,
+            fit: BoxFit.cover,
+          ),
+        ),
+        Positioned(
+          top: 10,
+          right: 10,
+          child: GestureDetector(
+            onTap: () {
+              // Tambahkan logika untuk toggle favorit
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.black.withOpacity(0.4),
+              ),
+              child: const Icon(
+                Icons.favorite_border, // Ubah menjadi `Icons.favorite` jika sudah favorit
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -139,6 +163,8 @@ class _HotelInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double rating = (hotel['rating'] as num).toDouble();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -148,6 +174,29 @@ class _HotelInfo extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        const SizedBox(height: 4),
+        Row(
+          children: [
+            ...List.generate(5, (index) {
+              if (index < rating.floor()) {
+                // Full star
+                return const Icon(Icons.star, color: Colors.amber, size: 20);
+              } else if (index < rating && (rating - index) >= 0.5) {
+                // Half star
+                return const Icon(Icons.star_half, color: Colors.amber, size: 20);
+              } else {
+                // Empty star
+                return Icon(Icons.star_border, color: Colors.grey.shade400, size: 20);
+              }
+            }),
+            const SizedBox(width: 8),
+            Text(
+              "(${rating.toStringAsFixed(1)})",
+              style: theme.textTheme.bodyMedium,
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
         Text(
           "Price: Rp ${hotel['price'] ?? '0'}",
           style: theme.textTheme.bodyLarge?.copyWith(
