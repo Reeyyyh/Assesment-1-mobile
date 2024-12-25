@@ -246,9 +246,9 @@ class HomeView extends StatelessWidget {
         // CarouselSlider wrapped in a SliverToBoxAdapter to make it scrollable
         SliverToBoxAdapter(
   child: CarouselSlider.builder(
-    itemCount: controller.filteredHotelList.length,
+    itemCount: controller.randomHotelList.length,
     itemBuilder: (context, index, realIndex) {
-      final hotel = controller.filteredHotelList[index];
+      final hotel = controller.randomHotelList[index];
       final rating = hotel['rating'] ?? 0.0; // Mengambil rating dari Firebase, default 0.0 jika tidak ada
       return GestureDetector(
         onTap: () {

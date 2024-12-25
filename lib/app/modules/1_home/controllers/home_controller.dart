@@ -8,6 +8,8 @@ class HomeController extends GetxController {
 
   var hotelList = [].obs;
   var filteredHotelList = [].obs;
+  var randomHotelList = [].obs;
+
   var isLoading = true.obs; // Status loading
 
   final ConnectivityController connectivityController =
@@ -18,8 +20,12 @@ class HomeController extends GetxController {
     isLoading.value = true;
     FirebaseFirestore.instance.collection('datahotel').snapshots().listen(
       (snapshot) {
+        var randomHotels = (snapshot.docs..shuffle()).take(3).toList();
+        randomHotelList.value = randomHotels.map((doc) => doc.data()).toList();
+
         hotelList.value = snapshot.docs.map((doc) => doc.data()).toList();
         filteredHotelList.value = hotelList;
+
         isLoading.value = false; // Selesai memuat data
       },
       onError: (error) {
@@ -48,6 +54,9 @@ class HomeController extends GetxController {
           await FirebaseFirestore.instance.collection('datahotel').get();
       hotelList.value = snapshot.docs.map((doc) => doc.data()).toList();
       filteredHotelList.value = hotelList;
+
+      var randomHotels = (snapshot.docs..shuffle()).take(3).toList();
+        randomHotelList.value = randomHotels.map((doc) => doc.data()).toList();
     } catch (e) {
       print("Error refreshing data: $e");
     } finally {
