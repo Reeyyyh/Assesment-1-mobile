@@ -29,6 +29,7 @@ class CardDetailView extends StatelessWidget {
 
   AppBar _buildAppBar(ThemeData theme) {
     return AppBar(
+      backgroundColor: theme.primaryColor,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios),
         color: Colors.white,
@@ -40,15 +41,6 @@ class CardDetailView extends StatelessWidget {
           fontSize: 25,
           fontWeight: FontWeight.bold,
           color: Colors.white,
-        ),
-      ),
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [theme.primaryColor, theme.colorScheme.secondary],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
         ),
       ),
     );
