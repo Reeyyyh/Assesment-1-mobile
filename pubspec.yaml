@@ -73,7 +73,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/Favicon/hotelFavicon.png"
+  image_path: "assets/Favicon/iconLocal.jpeg"
   min_sdk_android: 21
 
 # For information on the generic Dart part of this file, see the
