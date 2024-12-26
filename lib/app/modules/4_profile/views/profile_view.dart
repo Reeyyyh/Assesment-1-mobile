@@ -117,12 +117,7 @@ class ProfileView extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.security),
-                title: const Text('Security Settings'),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: const Icon(Icons.settings),
+                leading: const Icon(Icons.palette),
                 title: const Text('Theme Settings'),
                 onTap: () {
                   Get.to(() => const ThemeSettingsView());

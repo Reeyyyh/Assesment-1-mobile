@@ -11,6 +11,7 @@ import 'package:get_storage/get_storage.dart';
 class ProfileController extends GetxController {
   var imagePath = ''.obs;
   var userName = ''.obs;
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final ImagePicker _picker = ImagePicker();
@@ -39,7 +40,6 @@ class ProfileController extends GetxController {
       DocumentSnapshot doc =
           await _firestore.collection('users').doc(user.uid).get();
       userName.value = doc['namaUser'];
-      imagePath.value = doc['profilePicture'] ?? '';
       // Delay untuk memastikan TTS siap digunakan
       Future.delayed(const Duration(milliseconds: 500), () {
         _speak("Hello, ${userName.value}");
@@ -47,20 +47,10 @@ class ProfileController extends GetxController {
     }
   }
 
-  // Fungsi untuk menyimpan foto profil ke Firestore atau ke lokal
+  // Fungsi untuk menyimpan foto profil
   Future<void> _saveProfilePicture() async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      if (!connectivityController.isOffline.value) {
-        // Jika online, simpan ke Firebase
-        await _firestore.collection('users').doc(user.uid).update({
-          'profilePicture': imagePath.value,
-        });
-      } else {
-        // Jika offline, simpan ke lokal
-        box.write('profilePicture', imagePath.value);
-      }
-    }
+    box.write('profilePicture', imagePath.value);
+    imagePath.value = box.read('profilePicture');
   }
 
   // Fungsi untuk memilih gambar profil
@@ -75,12 +65,7 @@ class ProfileController extends GetxController {
   // Fungsi untuk menghapus gambar profil
   Future<void> removeImage() async {
     imagePath.value = '';
-    User? user = _auth.currentUser;
-    if (user != null) {
-      await _firestore.collection('users').doc(user.uid).update({
-        'profilePicture': FieldValue.delete(),
-      });
-    }
+    box.remove('profilePicture');
   }
 
   // Fungsi untuk mengupdate nama pengguna ke Firebase atau lokal
