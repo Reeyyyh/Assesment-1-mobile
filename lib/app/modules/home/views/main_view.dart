@@ -23,20 +23,18 @@ class MainPage extends StatelessWidget {
     return [
       HomeView(),
       TripplanView(),
-      QRScanView(),
+      Container(), // Placeholder for QRScanView
       FavoriteView(),
       ProfileView(),
     ];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
-    Color primaryColor = themeController.isDarkTheme.value
-        ? Colors.white
-        : Colors.black;
+    Color primaryColor =
+        themeController.isDarkTheme.value ? Colors.white : Colors.black;
 
-    Color secondaryColor = themeController.isDarkTheme.value
-        ? Colors.black
-        : Colors.white;
+    Color secondaryColor =
+        themeController.isDarkTheme.value ? Colors.black : Colors.white;
 
     return [
       PersistentBottomNavBarItem(
@@ -59,6 +57,12 @@ class MainPage extends StatelessWidget {
         activeColorPrimary: primaryColor,
         inactiveColorPrimary: Colors.grey,
         textStyle: const TextStyle(fontSize: 14),
+        onPressed: (context) {
+          Get.to(
+            () => const QRScanView(),
+            transition: Transition.rightToLeft,
+          );
+        },
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.heart),
@@ -82,8 +86,9 @@ class MainPage extends StatelessWidget {
     final MainController controller = Get.put(MainController());
 
     Color shadowColor = themeController.isDarkTheme.value
-        ? const Color.fromARGB(255, 255, 255, 255).withOpacity(0.3) // dark theme
-        : const Color.fromARGB(255, 0, 0, 0).withOpacity(0.3);  // light theme
+        ? const Color.fromARGB(255, 255, 255, 255)
+            .withOpacity(0.3) // dark theme
+        : const Color.fromARGB(255, 0, 0, 0).withOpacity(0.3); // light theme
 
     return Obx(() {
       return PersistentTabView(

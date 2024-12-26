@@ -11,7 +11,8 @@ class QRScanView extends StatefulWidget {
   _QRScanViewState createState() => _QRScanViewState();
 }
 
-class _QRScanViewState extends State<QRScanView> with SingleTickerProviderStateMixin {
+class _QRScanViewState extends State<QRScanView>
+    with SingleTickerProviderStateMixin {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   late AnimationController _animationController;
 
@@ -53,8 +54,10 @@ class _QRScanViewState extends State<QRScanView> with SingleTickerProviderStateM
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Theme.of(context).scaffoldBackgroundColor, // Warna background sesuai tema
-                    Theme.of(context).primaryColorLight, // Sesuaikan dengan warna yang diinginkan
+                    Theme.of(context)
+                        .scaffoldBackgroundColor, // Warna background sesuai tema
+                    Theme.of(context)
+                        .primaryColorLight, // Sesuaikan dengan warna yang diinginkan
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -84,21 +87,24 @@ class _QRScanViewState extends State<QRScanView> with SingleTickerProviderStateM
                             QRView(
                               key: qrKey,
                               onQRViewCreated: (p0) {
-                                // fungsi kosong untuk deteksi QR Code
+                                controller.startCamera(p0);
                               },
                             ),
                             AnimatedBuilder(
                               animation: _animationController,
                               builder: (context, child) {
                                 return Positioned(
-                                  top: _animationController.value * MediaQuery.of(context).size.height * 0.65,
+                                  top: _animationController.value *
+                                      MediaQuery.of(context).size.height *
+                                      0.65,
                                   left: 0,
                                   right: 0,
                                   child: child!,
                                 );
                               },
                               child: Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
                                 height: 4.0,
                                 color: Colors.red,
                               ),
@@ -116,13 +122,16 @@ class _QRScanViewState extends State<QRScanView> with SingleTickerProviderStateM
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton.icon(
-                          onPressed: () => controller.pickImage(ImageSource.gallery),
+                          onPressed: () =>
+                              controller.pickImage(ImageSource.gallery),
                           icon: const Icon(Icons.photo, size: 20),
                           label: const Text('Choose Image'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor, // Gunakan primaryColor dari tema
+                            backgroundColor: Theme.of(context)
+                                .primaryColor, // Gunakan primaryColor dari tema
                             foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
