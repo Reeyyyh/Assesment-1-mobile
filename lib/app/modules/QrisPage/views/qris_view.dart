@@ -54,10 +54,8 @@ class _QRScanViewState extends State<QRScanView>
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Theme.of(context)
-                        .scaffoldBackgroundColor, // Warna background sesuai tema
-                    Theme.of(context)
-                        .primaryColorLight, // Sesuaikan dengan warna yang diinginkan
+                    Theme.of(context).scaffoldBackgroundColor,
+                    Theme.of(context).primaryColorLight,
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -82,34 +80,37 @@ class _QRScanViewState extends State<QRScanView>
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                        child: Stack(
-                          children: [
-                            QRView(
-                              key: qrKey,
-                              onQRViewCreated: (p0) {
-                                controller.startCamera(p0);
-                              },
-                            ),
-                            AnimatedBuilder(
-                              animation: _animationController,
-                              builder: (context, child) {
-                                return Positioned(
-                                  top: _animationController.value *
-                                      MediaQuery.of(context).size.height *
-                                      0.65,
-                                  left: 0,
-                                  right: 0,
-                                  child: child!,
-                                );
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                height: 4.0,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ],
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            return Stack(
+                              children: [
+                                QRView(
+                                  key: qrKey,
+                                  onQRViewCreated: (p0) {
+                                    controller.startCamera(p0);
+                                  },
+                                ),
+                                AnimatedBuilder(
+                                  animation: _animationController,
+                                  builder: (context, child) {
+                                    return Positioned(
+                                      top: _animationController.value *
+                                          constraints.maxHeight,
+                                      left: 0,
+                                      right: 0,
+                                      child: child!,
+                                    );
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    height: 4.0,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -127,8 +128,27 @@ class _QRScanViewState extends State<QRScanView>
                           icon: const Icon(Icons.photo, size: 20),
                           label: const Text('Choose Image'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context)
-                                .primaryColor, // Gunakan primaryColor dari tema
+                            backgroundColor: Theme.of(context).primaryColor,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () => controller.toggleFlash(),
+                          icon: Icon(
+                              controller.isFlashOn
+                                  ? Icons.flash_off
+                                  : Icons.flash_on,
+                              size: 20),
+                          label: Text(controller.isFlashOn
+                              ? 'Turn Off Flash'
+                              : 'Turn On Flash'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).primaryColor,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 12),

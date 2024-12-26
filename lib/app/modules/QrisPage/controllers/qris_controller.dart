@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:qr_code_tools/qr_code_tools.dart';
 import 'dart:io';
 
 class QRScanController extends ChangeNotifier {
@@ -9,6 +10,7 @@ class QRScanController extends ChangeNotifier {
   QRViewController? _qrViewController;
 
   String scannedResult = ''; // Menyimpan hasil pemindaian
+  bool isFlashOn = false; // Menyimpan status senter
   
   File? _imageFile; // Menyimpan gambar yang diambil atau dipilih
 
@@ -26,10 +28,14 @@ class QRScanController extends ChangeNotifier {
   // Fungsi untuk mengambil gambar dari kamera atau galeri
   Future<void> pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
+    print('Picked file: $pickedFile');
     if (pickedFile != null) {
       _imageFile = File(pickedFile.path);
+      print('Image file path: ${_imageFile!.path}');
       // Memulai pemindaian QR Code dari gambar
-      scanQRFromFile(_imageFile!);
+      await scanQRFromFile(_imageFile!);
+    } else {
+      print('No file selected.');
     }
     notifyListeners();
   }
@@ -37,13 +43,26 @@ class QRScanController extends ChangeNotifier {
   // Fungsi untuk memindai QR Code dari gambar
   Future<void> scanQRFromFile(File imageFile) async {
     try {
-      // Placeholder untuk implementasi pemindaian QR
-      scannedResult = "Sample scanned result";
+      print('Scanning QR code from file: ${imageFile.path}');
+      final result = await QrCodeToolsPlugin.decodeFrom(imageFile.path);
+      scannedResult = result ?? "No QR code found";
+      print('Scan result: $scannedResult');
       _launchURL(scannedResult);
     } catch (e) {
       scannedResult = "Error scanning QR code: $e";
+      print(scannedResult);
     }
     notifyListeners();
+  }
+
+  // Fungsi untuk menyalakan/mematikan senter
+  void toggleFlash() {
+    if (_qrViewController != null) {
+      _qrViewController!.toggleFlash();
+      isFlashOn = !isFlashOn;
+      print('Flash is now ${isFlashOn ? 'ON' : 'OFF'}');
+      notifyListeners();
+    }
   }
 
   // Fungsi untuk membuka URL

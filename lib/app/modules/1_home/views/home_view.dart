@@ -89,7 +89,7 @@ class HomeView extends StatelessWidget {
             child: TextField(
               controller: searchController,
               decoration: InputDecoration(
-                hintText: 'Cari lokasi...',
+                hintText: 'search location',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25.0),
                 ),
@@ -137,7 +137,7 @@ class HomeView extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                'Tidak ada hotel yang ditemukan.',
+                'No hotels found',
                 style: tema.textTheme.headlineMedium?.copyWith(
                   fontSize: 18,
                   color: tema.colorScheme.onSurface,
@@ -147,7 +147,7 @@ class HomeView extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                'Ubah kriteria pencarian Anda.',
+                'change your search query or try again later',
                 style: tema.textTheme.bodyMedium?.copyWith(
                   fontSize: 16,
                   color: tema.colorScheme.onSurface.withOpacity(0.7),

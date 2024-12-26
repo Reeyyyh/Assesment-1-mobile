@@ -9,8 +9,6 @@ class NewsCard extends StatelessWidget {
   final String url;
   final String imageUrl;
   final DateTime publishedDate;
-  final String sourceName;
-  final String sourceUrl;
 
   const NewsCard({
     super.key,
@@ -19,8 +17,6 @@ class NewsCard extends StatelessWidget {
     required this.url,
     required this.imageUrl,
     required this.publishedDate,
-    required this.sourceName,
-    required this.sourceUrl,
   });
 
   @override
@@ -103,8 +99,6 @@ class NewsCard extends StatelessWidget {
                             url: url,
                             imageUrl: imageUrl,
                             publishedDate: publishedDate,
-                            sourceName: sourceName,
-                            sourceUrl: sourceUrl,
                           ),
                         );
                       },

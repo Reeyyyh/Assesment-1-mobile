@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hotel_app/app/modules/2_tripplan/components/elements/web_view.dart';
 import 'package:intl/intl.dart';
 
 class NewsDetailView extends StatelessWidget {
@@ -7,8 +9,6 @@ class NewsDetailView extends StatelessWidget {
   final String url;
   final String imageUrl;
   final DateTime publishedDate;
-  final String sourceName;
-  final String sourceUrl;
 
   const NewsDetailView({
     super.key,
@@ -17,8 +17,6 @@ class NewsDetailView extends StatelessWidget {
     required this.url,
     required this.imageUrl,
     required this.publishedDate,
-    required this.sourceName,
-    required this.sourceUrl,
   });
 
   @override
@@ -35,7 +33,7 @@ class NewsDetailView extends StatelessWidget {
           child: AppBar(
             backgroundColor: theme.primaryColor,
             title: const Text(
-              'Detail berita',
+              'News Detail',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -104,6 +102,26 @@ class NewsDetailView extends StatelessWidget {
                     height: 1.5,
                     color: theme.textTheme.bodyLarge?.color,
                   ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Tombol untuk membuka URL sumber berita
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    Get.to(() => WebViewPage(url: url));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: theme.primaryColor,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: const Text('Read Full Article'),
                 ),
               ),
             ],

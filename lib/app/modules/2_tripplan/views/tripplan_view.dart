@@ -23,7 +23,7 @@ class TripplanView extends StatelessWidget {
           child: AppBar(
             backgroundColor: theme.primaryColor,
             title: const Text(
-              'TripPlan News',
+              'TripNews',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -62,15 +62,13 @@ class TripplanView extends StatelessWidget {
                 final news = controller.newsList[index];
                 return NewsCard(
                   title: news['title'] ?? 'No title available',
-                  description: news['description'] ?? 'No description available',
+                  description:
+                      news['description'] ?? 'No description available',
                   url: news['link'] ?? '',
                   imageUrl: news['image_url'] ?? '',
                   publishedDate: news['pubDate'] != null
                       ? DateTime.tryParse(news['pubDate']) ?? DateTime.now()
                       : DateTime.now(),
-                  sourceName: news['sourceName'] ?? 'No source name available',
-                  sourceUrl: news['sourceUrl'] ?? '',
-                  
                 );
               },
             ),
