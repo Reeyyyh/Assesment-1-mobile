@@ -3,12 +3,29 @@ import '../../../data/services/hotel_services.dart';
 
 class TripplanController extends GetxController {
   final HotelService _hotelService = HotelService();
-  
-  Future<List<dynamic>> fetchNews() async {
+
+  var newsList = <dynamic>[].obs; // Observable list untuk news
+  var isLoading = false.obs; // Observable untuk status loading
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchNews(); // Panggil fetchNews saat controller diinisialisasi
+  }
+
+  Future<void> fetchNews() async {
+    isLoading.value = true;
     try {
-      return await _hotelService.fetchNewsData();
+      final fetchedNews = await _hotelService.fetchNewsData();
+      newsList.assignAll(fetchedNews); // Isi data ke newsList
     } catch (e) {
-      throw Exception('Failed to fetch news: $e');
+      Get.snackbar('Error', 'Failed to fetch news: $e');
+    } finally {
+      isLoading.value = false;
     }
+  }
+
+  Future<void> refreshNews() async {
+    await fetchNews(); // Panggil ulang fetchNews
   }
 }

@@ -47,7 +47,7 @@ class MainPage extends StatelessWidget {
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.map),
-        title: "Trip Plan",
+        title: "Trip news",
         activeColorPrimary: primaryColor,
         inactiveColorPrimary: Colors.grey,
       ),

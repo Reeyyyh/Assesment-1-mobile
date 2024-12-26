@@ -6,12 +6,11 @@ import 'package:get/get.dart';
 class TripplanView extends StatelessWidget {
   TripplanView({super.key});
 
-  final String query = 'liburan';
   final TripplanController controller = Get.put(TripplanController());
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // Ambil tema aktif
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: PreferredSize(
@@ -22,67 +21,55 @@ class TripplanView extends StatelessWidget {
             bottomRight: Radius.circular(10.0),
           ),
           child: AppBar(
-            backgroundColor:
-                theme.primaryColor, // Menggunakan satu warna dari tema
-            title: const Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'TripPlan News',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+            backgroundColor: theme.primaryColor,
+            title: const Text(
+              'TripPlan News',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             centerTitle: true,
-            elevation: 0, // Menghilangkan shadow
+            elevation: 0,
           ),
         ),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: controller.fetchNews(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                'Error: ${snapshot.error}',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.error, // Sesuaikan dengan tema
-                ),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (controller.newsList.isEmpty) {
+          return Center(
+            child: Text(
+              'No news available.',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
-            );
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-              child: Text('No news available.'),
-            );
-          }
+            ),
+          );
+        }
 
-          final newsList = snapshot.data!;
-
-          return ListView.builder(
-            itemCount: newsList.length,
+        return RefreshIndicator(
+          onRefresh: controller.refreshNews,
+          child: ListView.builder(
+            itemCount: controller.newsList.length,
             itemBuilder: (context, index) {
-              final news = newsList[index];
+              final news = controller.newsList[index];
               return NewsCard(
-                title: news['title'],
+                title: news['title'] ?? 'No title available',
                 description: news['description'] ?? 'No description available',
-                url: news['link'],
+                url: news['link'] ?? '',
                 imageUrl:
-                    news['image_url'] ?? 'https://via.placeholder.com/150',
+                    news['image_url'] ?? '',
               );
             },
-          );
-        },
-      ),
+          ),
+        );
+      }),
     );
   }
 }
