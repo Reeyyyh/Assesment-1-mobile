@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_app/app/modules/components/web_view.dart';
+import 'package:get/get.dart';
+import 'package:hotel_app/app/modules/2_tripplan/components/elements/news_detail_view.dart';
+import 'package:intl/intl.dart';
 
 class NewsCard extends StatelessWidget {
   final String title;
   final String description;
   final String url;
   final String imageUrl;
+  final DateTime publishedDate;
+  final String sourceName;
+  final String sourceUrl;
 
   const NewsCard({
     super.key,
@@ -13,6 +18,9 @@ class NewsCard extends StatelessWidget {
     required this.description,
     required this.url,
     required this.imageUrl,
+    required this.publishedDate,
+    required this.sourceName,
+    required this.sourceUrl,
   });
 
   @override
@@ -42,7 +50,8 @@ class NewsCard extends StatelessWidget {
                   width: 120,
                   color: Colors.grey[300],
                   child: const Center(
-                    child: Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                    child:
+                        Icon(Icons.broken_image, size: 40, color: Colors.grey),
                   ),
                 );
               },
@@ -64,12 +73,21 @@ class NewsCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(height: 4),
+                  // Tanggal publikasi
+                  Text(
+                    DateFormat('yyyy-MM-dd')
+                        .format(publishedDate), // Format hanya tanggal
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: Colors.grey,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   // Deskripsi berita
                   Text(
                     description,
                     style: theme.textTheme.bodyMedium,
-                    maxLines: 3,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
@@ -78,10 +96,15 @@ class NewsCard extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WebViewPage(url: url),
+                        Get.to(
+                          () => NewsDetailView(
+                            title: title,
+                            description: description,
+                            url: url,
+                            imageUrl: imageUrl,
+                            publishedDate: publishedDate,
+                            sourceName: sourceName,
+                            sourceUrl: sourceUrl,
                           ),
                         );
                       },

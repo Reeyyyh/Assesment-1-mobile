@@ -32,9 +32,9 @@ class MainPage extends StatelessWidget {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     Color primaryColor = themeController.isDarkTheme.value
         ? Colors.white
-        : Colors.green;
+        : Colors.black;
 
-    Color secondColor = themeController.isDarkTheme.value
+    Color secondaryColor = themeController.isDarkTheme.value
         ? Colors.black
         : Colors.white;
 
@@ -44,30 +44,35 @@ class MainPage extends StatelessWidget {
         title: "Home",
         activeColorPrimary: primaryColor,
         inactiveColorPrimary: Colors.grey,
+        textStyle: const TextStyle(fontSize: 14),
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.map),
         title: "Trip news",
         activeColorPrimary: primaryColor,
         inactiveColorPrimary: Colors.grey,
+        textStyle: const TextStyle(fontSize: 14),
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.qrcode_viewfinder, color: secondColor),
+        icon: Icon(CupertinoIcons.qrcode_viewfinder, color: secondaryColor),
         title: "QR Scan",
         activeColorPrimary: primaryColor,
         inactiveColorPrimary: Colors.grey,
+        textStyle: const TextStyle(fontSize: 14),
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.heart),
         title: "Favorite",
         activeColorPrimary: primaryColor,
         inactiveColorPrimary: Colors.grey,
+        textStyle: const TextStyle(fontSize: 14),
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.person),
         title: "Profile",
         activeColorPrimary: primaryColor,
         inactiveColorPrimary: Colors.grey,
+        textStyle: const TextStyle(fontSize: 14),
       ),
     ];
   }
