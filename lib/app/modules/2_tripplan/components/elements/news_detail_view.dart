@@ -41,8 +41,19 @@ class NewsDetailView extends StatelessWidget {
                 child: Image.network(
                   imageUrl,
                   width: double.infinity,
-                  height: 250,
+                  height: 200,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 200,
+                      width: double.infinity,
+                      color: Colors.grey[300],
+                      child: const Center(
+                        child: Icon(Icons.broken_image,
+                            size: 40, color: Colors.grey),
+                      ),
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 16),
@@ -59,8 +70,7 @@ class NewsDetailView extends StatelessWidget {
 
               // Tanggal publikasi
               Text(
-                'Published on ${DateFormat('yyyy-MM-dd')
-                    .format(publishedDate)}', // Format hanya tanggal
+                'Published on ${DateFormat('yyyy-MM-dd').format(publishedDate)}', // Format hanya tanggal
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: Colors.grey,
                 ),
