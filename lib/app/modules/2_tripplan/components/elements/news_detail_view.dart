@@ -25,13 +25,30 @@ class NewsDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Detail Berita"),
-        backgroundColor: Colors.blueAccent,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50.0),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(10.0),
+            bottomRight: Radius.circular(10.0),
+          ),
+          child: AppBar(
+            backgroundColor: theme.primaryColor,
+            title: const Text(
+              'Detail berita',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            elevation: 0,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(12.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
