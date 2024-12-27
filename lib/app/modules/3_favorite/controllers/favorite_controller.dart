@@ -29,7 +29,7 @@ class FavoriteController extends GetxController {
     final favoritesCollection = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .collection('favorites');
+        .collection('favoriteHotels');
 
     try {
       final querySnapshot = await favoritesCollection.get();
@@ -63,7 +63,7 @@ class FavoriteController extends GetxController {
     final docRef = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .collection('favorites')
+        .collection('favoriteHotels')
         .doc(); // ID akan di-generate otomatis oleh Firestore
 
     try {
@@ -92,7 +92,7 @@ void removeFromFavorites(String hotelId) async {
   final docRef = FirebaseFirestore.instance
       .collection('users')
       .doc(userId)
-      .collection('favorites')
+      .collection('favoriteHotels')
       .doc(hotelId);
 
   try {

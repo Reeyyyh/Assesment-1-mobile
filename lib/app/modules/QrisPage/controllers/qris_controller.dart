@@ -35,7 +35,7 @@ class QRScanController extends ChangeNotifier {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.platformDefault);
     } else {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      await launchUrl(uri, mode: LaunchMode.platformDefault);
       throw 'Could not launch $url';
     }
   }
