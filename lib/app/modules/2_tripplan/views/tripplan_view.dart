@@ -37,13 +37,8 @@ class TripplanView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.isLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
 
-          if (controller.newsList.isEmpty) {
+          if (controller.newsList.isEmpty  && !controller.isLoading.value) {
             return Center(
               child: Text(
                 'No news available.',
@@ -69,6 +64,7 @@ class TripplanView extends StatelessWidget {
                   publishedDate: news['pubDate'] != null
                       ? DateTime.tryParse(news['pubDate']) ?? DateTime.now()
                       : DateTime.now(),
+                  isLoading: controller.isLoading.value,
                 );
               },
             ),
