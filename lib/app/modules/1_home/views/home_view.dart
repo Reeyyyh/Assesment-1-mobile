@@ -313,6 +313,7 @@ class HomeView extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 final hotel = controller.filteredHotelList[index];
+                final rating = hotel['rating'] ?? 0.0;
                 return GestureDetector(
                   onTap: () {
                     Get.to(() => CardDetailView(hotel: hotel));
@@ -367,7 +368,6 @@ class HomeView extends StatelessWidget {
                                             : Colors.white,
                                       ),
                                       onPressed: () {
-                                        
                                         if (isFavorited) {
                                           // Hapus dari favorit berdasarkan UID unik
                                           favoriteController
@@ -384,6 +384,36 @@ class HomeView extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            Positioned(
+                              top: 8, // Posisikan di bawah gambar
+                              left: 8,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.star,
+                                      color: Colors.yellow,
+                                      size: 16,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      rating.toStringAsFixed(1),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         Padding(
@@ -397,6 +427,9 @@ class HomeView extends StatelessWidget {
                                   fontSize: controller.imageFont,
                                   fontWeight: FontWeight.bold,
                                 ),
+                                overflow: TextOverflow
+                                    .ellipsis,
+                                maxLines: 1,
                               ),
                               const SizedBox(height: 4),
                               Row(

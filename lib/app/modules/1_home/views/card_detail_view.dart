@@ -147,7 +147,7 @@ class _HotelImage extends StatelessWidget {
               );
 
               return Container(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.black.withOpacity(0.4),

@@ -22,7 +22,7 @@ class HomeController extends GetxController {
   isLoading.value = true;
   FirebaseFirestore.instance.collection('datahotel').snapshots().listen(
     (snapshot) {
-      var randomHotels = (snapshot.docs..shuffle()).take(3).toList();
+      var randomHotels = (snapshot.docs..shuffle()).take(5).toList();
       randomHotelList.value = randomHotels.map((doc) {
         var data = doc.data();
         return data;
@@ -63,7 +63,7 @@ class HomeController extends GetxController {
     hotelList.value = snapshot.docs.map((doc) => doc.data()).toList();
     filteredHotelList.value = hotelList;
 
-    var randomHotels = (snapshot.docs..shuffle()).take(3).toList();
+    var randomHotels = (snapshot.docs..shuffle()).take(5).toList();
     randomHotelList.value = randomHotels.map((doc) => doc.data()).toList();
 
     // Panggil fetchFavorites dari FavoriteController
