@@ -9,6 +9,7 @@ class HomeController extends GetxController {
   var hotelList = [].obs;
   var filteredHotelList = [].obs;
   var randomHotelList = [].obs;
+  var currentSearchQuery = ''.obs; // Menyimpan kata kunci pencarian terakhir
 
   var isLoading = true.obs; // Status loading
 
@@ -37,6 +38,7 @@ class HomeController extends GetxController {
 
   // Filter berdasarkan lokasi
   void filterHotels(String query) {
+    currentSearchQuery.value = query;
     query = query.toLowerCase();
     filteredHotelList.value = hotelList.where((hotel) {
       var location = hotel['location']?.toLowerCase() ?? '';
@@ -49,6 +51,7 @@ class HomeController extends GetxController {
   // Manual refresh function
   Future<void> refreshData() async {
     isLoading.value = true;
+    currentSearchQuery.value = ''; // Reset search query
     try {
       final snapshot =
           await FirebaseFirestore.instance.collection('datahotel').get();
