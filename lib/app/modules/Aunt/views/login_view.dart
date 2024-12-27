@@ -88,7 +88,7 @@ class LoginView extends StatelessWidget {
               ),
               const SizedBox(height: 40),
               // Email TextField
-              Container(
+              SizedBox(
                 width: double.infinity, // Menyesuaikan dengan lebar layar
                 child: TextField(
                   controller: loginController.emailController,
@@ -107,7 +107,7 @@ class LoginView extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               // Password TextField
-              Container(
+              SizedBox(
                 width: double.infinity, // Menyesuaikan dengan lebar layar
                 child: Obx(
                   () => TextField(

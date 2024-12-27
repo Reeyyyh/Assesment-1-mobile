@@ -122,191 +122,187 @@ class HomeView extends StatelessWidget {
 
   // Jika daftar tidak kosong, tampilkan GridView
   Widget _buildHotelGrid(ThemeData tema) {
-    // Periksa apakah daftar hotel yang sudah difilter kosong
-    if (controller.filteredHotelList.isEmpty) {
-      return Center(
+  return CustomScrollView(
+    slivers: [
+      // Bagian judul untuk carousel
+      SliverToBoxAdapter(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.search_off,
-                size: 80,
-                color: tema.colorScheme.error,
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'No hotels found',
-                style: tema.textTheme.headlineMedium?.copyWith(
-                  fontSize: 18,
-                  color: tema.colorScheme.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'change your search query or try again later',
-                style: tema.textTheme.bodyMedium?.copyWith(
-                  fontSize: 16,
-                  color: tema.colorScheme.onSurface.withOpacity(0.7),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    // Jika daftar tidak kosong, tampilkan GridView
-    return CustomScrollView(
-      slivers: [
-        // Add the "Recommended Hotels" text above the Carousel
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Recommended Hotels', // The title for the section
-              style: tema.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Recommended Hotels',
+            style: tema.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
             ),
           ),
         ),
-        // CarouselSlider wrapped in a SliverToBoxAdapter to make it scrollable
-        SliverToBoxAdapter(
-          child: CarouselSlider.builder(
-            itemCount: controller.randomHotelList.length,
-            itemBuilder: (context, index, realIndex) {
-              final hotel = controller.randomHotelList[index];
-              final rating = hotel['rating'] ??
-                  0.0; // Mengambil rating dari Firebase, default 0.0 jika tidak ada
-              return GestureDetector(
-                onTap: () {
-                  Get.to(() =>
-                      CardDetailView(hotel: hotel)); // Navigate to hotel detail
-                },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+      ),
+
+      // Carousel hotel rekomendasi
+      SliverToBoxAdapter(
+        child: CarouselSlider.builder(
+          itemCount: controller.randomHotelList.length,
+          itemBuilder: (context, index, realIndex) {
+            final hotel = controller.randomHotelList[index];
+            final rating = hotel['rating'] ?? 0.0;
+
+            return GestureDetector(
+              onTap: () {
+                Get.to(() => CardDetailView(hotel: hotel));
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(10),
+                    bottom: Radius.circular(20),
                   ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(10),
-                      bottom: Radius.circular(20),
-                    ),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Image.network(
-                          hotel['image'] ?? '',
-                          fit: BoxFit.cover,
-                        ),
-                        // Overlay text on the image
-                        Positioned(
-                          left: 0,
-                          bottom: 0,
-                          child: Container(
-                            width: 400,
-                            padding: const EdgeInsets.all(8.0),
-                            color: Colors.black.withOpacity(
-                                0.5), // semi-transparent background
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  hotel['name'] ?? 'Tidak Dikenal',
-                                  style: tema.textTheme.bodyLarge?.copyWith(
-                                    fontSize: controller.imageFont,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white, // text color white
-                                  ),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.network(
+                        hotel['image'] ?? '',
+                        fit: BoxFit.cover,
+                      ),
+                      Positioned(
+                        left: 0,
+                        bottom: 0,
+                        child: Container(
+                          width: 400,
+                          padding: const EdgeInsets.all(8.0),
+                          color: Colors.black.withOpacity(0.5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                hotel['name'] ?? 'Tidak Dikenal',
+                                style: tema.textTheme.bodyLarge?.copyWith(
+                                  fontSize: controller.imageFont,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
                                 ),
-                                const SizedBox(height: 2),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.location_on,
-                                        color: Colors.white, size: 16),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      hotel['location'] ?? 'Tidak Dikenal',
-                                      style:
-                                          tema.textTheme.bodyMedium?.copyWith(
-                                        fontSize: controller.itemCategoryFont,
-                                        color: Colors.white, // text color white
-                                      ),
+                              ),
+                              const SizedBox(height: 2),
+                              Row(
+                                children: [
+                                  const Icon(Icons.location_on,
+                                      color: Colors.white, size: 16),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    hotel['location'] ?? 'Tidak Dikenal',
+                                    style: tema.textTheme.bodyMedium?.copyWith(
+                                      fontSize: controller.itemCategoryFont,
+                                      color: Colors.white,
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        // Add Rating in the top right corner with background
-                        Positioned(
-                          top: 8,
-                          right: 8,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(
-                                  0.6), // Semi-transparent background for the rating
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.star,
-                                  color: Colors.yellow, // Bintang warna kuning
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  rating.toStringAsFixed(
-                                      1), // Menampilkan rating dengan 1 angka desimal
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
                                   ),
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.6),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                color: Colors.yellow,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                rating.toStringAsFixed(1),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              );
-            },
-            options: CarouselOptions(
-              height: 180,
-              viewportFraction: 1.0,
-              enlargeCenterPage: true,
-              autoPlay: true,
+              ),
+            );
+          },
+          options: CarouselOptions(
+            height: 180,
+            viewportFraction: 1.0,
+            enlargeCenterPage: true,
+            autoPlay: true,
+          ),
+        ),
+      ),
+
+      // Bagian judul untuk grid
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Discover More',
+            style: tema.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
             ),
           ),
         ),
+      ),
 
+      // Tampilkan pesan jika tidak ada hotel ditemukan
+      if (controller.filteredHotelList.isEmpty)
         SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Discover More', // The title for the section
-              style: tema.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.youtube_searched_for,
+                    size: 80,
+                    color: tema.colorScheme.error,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'No hotels found',
+                    style: tema.textTheme.headlineMedium?.copyWith(
+                      fontSize: 18,
+                      color: tema.colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Change your search query or try again later',
+                    style: tema.textTheme.bodyMedium?.copyWith(
+                      fontSize: 16,
+                      color: tema.colorScheme.onSurface.withOpacity(0.7),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
           ),
         ),
 
-        // GridView wrapped in SliverGrid
+      // GridView untuk daftar hotel
+      if (controller.filteredHotelList.isNotEmpty)
         SliverGrid(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
@@ -412,7 +408,8 @@ class HomeView extends StatelessWidget {
             childAspectRatio: 0.75,
           ),
         ),
-      ],
-    );
-  }
+    ],
+  );
+}
+
 }
