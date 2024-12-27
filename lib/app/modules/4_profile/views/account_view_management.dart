@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/app/modules/Aunt/views/login_view.dart';
+import 'package:hotel_app/app/modules/components/custom/appBar.dart';
 import '../controllers/profile_controller.dart';
 
 class AccountManagementView extends StatelessWidget {
@@ -11,11 +12,27 @@ class AccountManagementView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Manage Account'),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 0,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(90.0),
+        child: ClipPath(
+          clipper: CustomAppBarClipper(),
+          child: Container(
+            color: Theme.of(context).primaryColor,
+            child: AppBar(
+              title: Text(
+                'Profile',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+              ),
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+            ),
+          ),
+        ),
       ),
       body: Container(
         width: double.infinity,
