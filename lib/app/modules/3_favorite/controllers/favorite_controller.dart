@@ -36,18 +36,17 @@ class FavoriteController extends GetxController {
       favoriteItems.assignAll(
         querySnapshot.docs.map((doc) {
           final data = doc.data();
-          data['id'] = doc.id; // Tambahkan ID dokumen ke data
           return data;
         }).toList(),
       );
-      print("Favorites fetched successfully!");
+      print("Favorites fetched successfully: ${favoriteItems.length}");
     } catch (e) {
       print("Failed to fetch favorites: $e");
     }
   }
 
- // Tambahkan item ke daftar favorit
-void addToFavorites(Map<String, dynamic> hotel) async {
+  // Tambahkan item ke daftar favorit
+  void addToFavorites(Map<String, dynamic> hotel) async {
   final currentUser = FirebaseAuth.instance.currentUser;
 
   if (currentUser == null) {
@@ -60,24 +59,21 @@ void addToFavorites(Map<String, dynamic> hotel) async {
   }
 
   final userId = currentUser.uid;
+  final hotelId = hotel['id']; // Ambil ID dari datahotel
   final docRef = FirebaseFirestore.instance
       .collection('users')
       .doc(userId)
       .collection('favoriteHotels')
-      .doc(); // Firebase akan membuat ID otomatis
+      .doc(hotelId); // Gunakan ID yang sudah ada
 
   try {
-    // Simpan ke Firestore dengan UID unik
-    await docRef.set({
-      ...hotel, // Semua data hotel
-      'id': docRef.id, // Tambahkan UID ke data hotel
-    });
+    // Simpan ke Firestore menggunakan ID yang sudah ada
+    await docRef.set(hotel);
 
-    // Tambahkan UID ke data lokal
-    hotel['id'] = docRef.id;
-
-    // Simpan ke dalam daftar lokal
-    favoriteItems.add(hotel);
+    // Tambahkan ke daftar lokal
+    if (!favoriteItems.any((item) => item['id'] == hotelId)) {
+      favoriteItems.add(hotel);
+    }
 
     Get.snackbar(
       "Added",
@@ -90,36 +86,36 @@ void addToFavorites(Map<String, dynamic> hotel) async {
 }
 
 // Hapus item dari daftar favorit
-void removeFromFavorites(String hotelId) async {
-  final currentUser = FirebaseAuth.instance.currentUser;
+  void removeFromFavorites(String hotelId) async {
+    final currentUser = FirebaseAuth.instance.currentUser;
 
-  if (currentUser == null) {
-    print("No user logged in. Cannot remove from favorites.");
-    return;
+    if (currentUser == null) {
+      print("No user logged in. Cannot remove from favorites.");
+      return;
+    }
+
+    final userId = currentUser.uid;
+    final docRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('favoriteHotels')
+        .doc(hotelId);
+
+    try {
+      // Hapus dari Firestore
+      await docRef.delete();
+
+      // Hapus dari daftar lokal
+      favoriteItems.removeWhere((item) => item['id'] == hotelId);
+
+      print("Hotel with ID: $hotelId removed successfully");
+    } catch (e) {
+      print("Failed to remove from favorites: $e");
+    }
   }
 
-  final userId = currentUser.uid;
-  final docRef = FirebaseFirestore.instance
-      .collection('users')
-      .doc(userId)
-      .collection('favoriteHotels')
-      .doc(hotelId);
-
-  try {
-    // Hapus dari Firestore
-    await docRef.delete();
-
-    // Hapus dari daftar lokal
-    favoriteItems.removeWhere((item) => item['id'] == hotelId);
-
-    print("Hotel with ID: $hotelId removed successfully");
-  } catch (e) {
-    print("Failed to remove from favorites: $e");
+  // Periksa apakah hotel ada dalam daftar favorit
+  bool isFavorite(Map<String, dynamic> hotel) {
+    return favoriteItems.any((item) => item['id'] == hotel['id']);
   }
-}
-
-// Periksa apakah hotel ada dalam daftar favorit
-bool isFavorite(Map<String, dynamic> hotel) {
-  return favoriteItems.any((item) => item['id'] == hotel['id']);
-}
 }
