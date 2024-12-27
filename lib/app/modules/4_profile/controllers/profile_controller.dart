@@ -87,6 +87,22 @@ class ProfileController extends GetxController {
     }
   }
 
+  // Fungsi untuk menghapus akun
+  Future<void> deleteAccount() async {
+    try {
+      User? user = _auth.currentUser;
+
+      if (user != null) {
+        await user.delete();
+        Get.snackbar('Sukses', 'Akun berhasil dihapus.');
+      } else {
+        Get.snackbar('Error', 'Tidak ada pengguna yang sedang login.');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal menghapus akun: $e');
+    }
+  }
+
   // Fungsi untuk logout
   void logOut() async {
     await _auth.signOut();
