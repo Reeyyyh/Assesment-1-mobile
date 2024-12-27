@@ -63,7 +63,6 @@ dependencies:
   connectivity_plus: ^6.1.0
   carousel_slider: ^5.0.0
   intl: ^0.20.1
-  qr_code_tools: ^0.1.0
 
 
 dev_dependencies:

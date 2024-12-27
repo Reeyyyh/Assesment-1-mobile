@@ -123,21 +123,6 @@ class _QRScanViewState extends State<QRScanView>
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton.icon(
-                          onPressed: () =>
-                              controller.pickImage(ImageSource.gallery),
-                          icon: const Icon(Icons.photo, size: 20),
-                          label: const Text('Choose Image'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                        ),
-                        ElevatedButton.icon(
                           onPressed: () => controller.toggleFlash(),
                           icon: Icon(
                               controller.isFlashOn
