@@ -18,8 +18,6 @@ class TripplanController extends GetxController {
     try {
       final fetchedNews = await _hotelService.fetchNewsData();
       newsList.assignAll(fetchedNews); // Isi data ke newsList
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch news: $e');
     } finally {
       isLoading.value = false;
     }

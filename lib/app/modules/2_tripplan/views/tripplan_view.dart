@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_app/app/modules/2_tripplan/controllers/tripplan_controller.dart';
-import '../components/news_card.dart';
 import 'package:get/get.dart';
+import 'package:hotel_app/app/modules/2_tripplan/components/elements/news_loading.dart';
+import 'package:hotel_app/app/modules/2_tripplan/components/news_card.dart';
+import 'package:hotel_app/app/modules/2_tripplan/controllers/tripplan_controller.dart';
+
 
 class TripplanView extends StatelessWidget {
   TripplanView({super.key});
@@ -37,8 +39,17 @@ class TripplanView extends StatelessWidget {
       ),
       body: Obx(
         () {
+          if (controller.isLoading.value) {
+            // Menampilkan skeletonizer saat loading
+            return ListView.builder(
+              itemCount: 6, // Menampilkan 5 item skeleton sebagai contoh
+              itemBuilder: (context, index) {
+                return const NewsCardSkeleton(); // Menggunakan widget skeleton baru
+              },
+            );
+          }
 
-          if (controller.newsList.isEmpty  && !controller.isLoading.value) {
+          if (controller.newsList.isEmpty) {
             return Center(
               child: Text(
                 'No news available.',
@@ -64,10 +75,9 @@ class TripplanView extends StatelessWidget {
                   publishedDate: news['pubDate'] != null
                       ? DateTime.tryParse(news['pubDate']) ?? DateTime.now()
                       : DateTime.now(),
-                  isLoading: controller.isLoading.value,
                 );
               },
-            ),
+            )
           );
         },
       ),
