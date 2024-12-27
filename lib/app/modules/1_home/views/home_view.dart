@@ -149,7 +149,6 @@ class HomeView extends StatelessWidget {
             itemCount: controller.randomHotelList.length,
             itemBuilder: (context, index, realIndex) {
               final hotel = controller.randomHotelList[index];
-              final rating = hotel['rating'] ?? 0.0;
 
               return GestureDetector(
                 onTap: () {
@@ -228,7 +227,7 @@ class HomeView extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  rating.toStringAsFixed(1),
+                                  hotel['rating'].toStringAsFixed(1),
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -313,7 +312,6 @@ class HomeView extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 final hotel = controller.filteredHotelList[index];
-                final rating = hotel['rating'] ?? 0.0;
                 return GestureDetector(
                   onTap: () {
                     Get.to(() => CardDetailView(hotel: hotel));
@@ -377,7 +375,6 @@ class HomeView extends StatelessWidget {
                                           favoriteController
                                               .addToFavorites(hotel);
                                         }
-                                        print(isFavorited);
                                       },
                                     );
                                   },
@@ -403,7 +400,7 @@ class HomeView extends StatelessWidget {
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
-                                      rating.toStringAsFixed(1),
+                                      hotel['rating'].toStringAsFixed(1),
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,

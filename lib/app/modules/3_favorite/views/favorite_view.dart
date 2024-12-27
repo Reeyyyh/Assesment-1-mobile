@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hotel_app/app/modules/1_home/views/card_detail_view.dart';
 import 'package:hotel_app/app/modules/3_favorite/controllers/favorite_controller.dart';
 
 class FavoriteView extends StatelessWidget {
@@ -127,9 +128,7 @@ class FavoriteItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // Ambil tema aktif
-
-    // Pastikan item memiliki nilai yang tidak null sebelum digunakan
+    final theme = Theme.of(context);
 
     final itemName = item['name'] ?? 'Unknown';
     final itemImage = item['image'] ?? '';
@@ -137,102 +136,108 @@ class FavoriteItemCard extends StatelessWidget {
     final itemPrice = item['price'] ?? 'Price not available';
     final itemRating = item['rating'] ?? 0.0;
 
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      color: theme.cardColor, // Sesuaikan dengan warna card di tema
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(itemImage),
+    return GestureDetector(
+      onTap: () {
+        // Navigasi ke CardDetailView dengan data hotel
+        Get.to(() => CardDetailView(hotel: item));
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        color: theme.cardColor,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(itemImage),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    itemName,
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      itemName,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.location_on,
-                        color: Colors.grey,
-                        size: 16,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        itemLocation,
-                        style: theme.textTheme.bodyMedium?.copyWith(
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on,
                           color: Colors.grey,
+                          size: 16,
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: List.generate(5, (index) {
-                      if (index < itemRating.floor()) {
-                        return const Icon(
-                          Icons.star,
-                          color: Colors.orange,
-                          size: 18,
-                        );
-                      } else if (index < itemRating) {
-                        return const Icon(
-                          Icons.star_half,
-                          color: Colors.orange,
-                          size: 18,
-                        );
-                      } else {
-                        return const Icon(
-                          Icons.star_border,
-                          color: Colors.grey,
-                          size: 18,
-                        );
-                      }
-                    }),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Rp $itemPrice',
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: theme.primaryColor,
+                        const SizedBox(width: 4),
+                        Text(
+                          itemLocation,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: List.generate(5, (index) {
+                        if (index < itemRating.floor()) {
+                          return const Icon(
+                            Icons.star,
+                            color: Colors.orange,
+                            size: 18,
+                          );
+                        } else if (index < itemRating) {
+                          return const Icon(
+                            Icons.star_half,
+                            color: Colors.orange,
+                            size: 18,
+                          );
+                        } else {
+                          return const Icon(
+                            Icons.star_border,
+                            color: Colors.grey,
+                            size: 18,
+                          );
+                        }
+                      }),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Rp $itemPrice',
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: theme.primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            // Ikon panah kiri sebagai petunjuk swipe to delete
-            const Icon(
-              Icons.arrow_left_sharp, // Ikon panah kiri
-              color: Colors.grey,
-              size: 24,
-            ),
-          ],
+              const Icon(
+                Icons.arrow_left_sharp,
+                color: Colors.grey,
+                size: 24,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
