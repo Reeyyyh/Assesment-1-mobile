@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class QRScanController extends ChangeNotifier {
-  final ImagePicker _picker = ImagePicker();
   QRViewController? _qrViewController;
 
   String scannedResult = ''; // Menyimpan hasil pemindaian
