@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/app/data/connections/controllers/connectivity_controller.dart';
 import 'package:hotel_app/app/modules/1_home/controllers/card_detail_controller.dart';
+import 'package:hotel_app/app/modules/3_favorite/controllers/favorite_controller.dart';
 
 class CardDetailView extends StatelessWidget {
   final Map<String, dynamic> hotel;
@@ -137,19 +138,28 @@ class _HotelImage extends StatelessWidget {
             onTap: () {
               // Tambahkan logika untuk toggle favorit
             },
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.black.withOpacity(0.4),
-              ),
-              child: const Icon(
-                Icons.favorite_border, // Ubah menjadi `Icons.favorite` jika sudah favorit
-                color: Colors.white,
-              ),
-            ),
+            child: Obx(() {
+              final favoriteController = Get.find<FavoriteController>();
+
+              // Periksa apakah hotel ada di daftar favorit berdasarkan ID
+              final isFavorited = favoriteController.favoriteItems.any(
+                (item) => item['id'] == hotel['id'],
+              );
+
+              return Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black.withOpacity(0.4),
+                ),
+                child: Icon(
+                  isFavorited ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorited ? Colors.red : Colors.white,
+                ),
+              );
+            }),
           ),
-        ),
+        )
       ],
     );
   }
@@ -183,10 +193,12 @@ class _HotelInfo extends StatelessWidget {
                 return const Icon(Icons.star, color: Colors.amber, size: 20);
               } else if (index < rating && (rating - index) >= 0.5) {
                 // Half star
-                return const Icon(Icons.star_half, color: Colors.amber, size: 20);
+                return const Icon(Icons.star_half,
+                    color: Colors.amber, size: 20);
               } else {
                 // Empty star
-                return Icon(Icons.star_border, color: Colors.grey.shade400, size: 20);
+                return Icon(Icons.star_border,
+                    color: Colors.grey.shade400, size: 20);
               }
             }),
             const SizedBox(width: 8),

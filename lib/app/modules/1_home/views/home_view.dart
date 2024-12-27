@@ -313,7 +313,6 @@ class HomeView extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 final hotel = controller.filteredHotelList[index];
-                print(hotel['id']);
                 return GestureDetector(
                   onTap: () {
                     Get.to(() => CardDetailView(hotel: hotel));

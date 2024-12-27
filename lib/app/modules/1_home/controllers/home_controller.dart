@@ -25,13 +25,11 @@ class HomeController extends GetxController {
       var randomHotels = (snapshot.docs..shuffle()).take(3).toList();
       randomHotelList.value = randomHotels.map((doc) {
         var data = doc.data();
-        data['id'] = doc.id; // Masukkan UID ke dalam data
         return data;
       }).toList();
 
       hotelList.value = snapshot.docs.map((doc) {
         var data = doc.data();
-        data['id'] = doc.id; // Masukkan UID ke dalam data
         return data;
       }).toList();
 
