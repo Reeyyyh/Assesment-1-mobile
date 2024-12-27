@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/app/modules/4_profile/views/account_view_management.dart';
 import 'package:hotel_app/app/modules/4_profile/views/edit_profile_view.dart';
-import 'package:hotel_app/app/modules/4_profile/views/firebase_hotel_view.dart';
 import 'package:hotel_app/app/modules/4_profile/views/theme_setting_view.dart';
 import 'package:hotel_app/app/modules/components/custom/appBar.dart';
 import '../controllers/profile_controller.dart';
