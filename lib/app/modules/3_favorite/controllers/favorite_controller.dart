@@ -46,40 +46,50 @@ class FavoriteController extends GetxController {
     }
   }
 
-  // Tambahkan item ke daftar favorit
-  void addToFavorites(Map<String, dynamic> hotel) async {
-    final currentUser = FirebaseAuth.instance.currentUser;
+ // Tambahkan item ke daftar favorit
+void addToFavorites(Map<String, dynamic> hotel) async {
+  final currentUser = FirebaseAuth.instance.currentUser;
 
-    if (currentUser == null) {
-      Get.snackbar(
-        "Login Required",
-        "Please login to add items to favorites.",
-        snackPosition: SnackPosition.TOP,
-      );
-      return;
-    }
-
-    final userId = currentUser.uid;
-    final docRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .collection('favoriteHotels')
-        .doc(); // ID akan di-generate otomatis oleh Firestore
-
-    try {
-      await docRef.set(hotel);
-      hotel['id'] = docRef.id; // Menyimpan ID dokumen yang di-generate
-      favoriteItems.add(hotel); // Tambahkan ke daftar lokal
-      Get.snackbar(
-        "Added",
-        "${hotel['name']} has been added to favorites.",
-        snackPosition: SnackPosition.TOP,
-      );
-    } catch (e) {
-      print("Failed to add to favorites: $e");
-    }
+  if (currentUser == null) {
+    Get.snackbar(
+      "Login Required",
+      "Please login to add items to favorites.",
+      snackPosition: SnackPosition.TOP,
+    );
+    return;
   }
 
+  final userId = currentUser.uid;
+  final docRef = FirebaseFirestore.instance
+      .collection('users')
+      .doc(userId)
+      .collection('favoriteHotels')
+      .doc(); // Firebase akan membuat ID otomatis
+
+  try {
+    // Simpan ke Firestore dengan UID unik
+    await docRef.set({
+      ...hotel, // Semua data hotel
+      'id': docRef.id, // Tambahkan UID ke data hotel
+    });
+
+    // Tambahkan UID ke data lokal
+    hotel['id'] = docRef.id;
+
+    // Simpan ke dalam daftar lokal
+    favoriteItems.add(hotel);
+
+    Get.snackbar(
+      "Added",
+      "${hotel['name']} has been added to favorites.",
+      snackPosition: SnackPosition.TOP,
+    );
+  } catch (e) {
+    print("Failed to add to favorites: $e");
+  }
+}
+
+// Hapus item dari daftar favorit
 void removeFromFavorites(String hotelId) async {
   final currentUser = FirebaseAuth.instance.currentUser;
 
@@ -96,24 +106,20 @@ void removeFromFavorites(String hotelId) async {
       .doc(hotelId);
 
   try {
-    // Debug print sebelum penghapusan
-    print("Attempting to delete hotel with ID: $hotelId");
-
-    // Hapus item dari Firestore
+    // Hapus dari Firestore
     await docRef.delete();
 
-    // Debug print setelah penghapusan
-    print("Hotel with ID: $hotelId successfully deleted from Firestore");
-
-    // Hapus item dari daftar lokal
+    // Hapus dari daftar lokal
     favoriteItems.removeWhere((item) => item['id'] == hotelId);
 
-    // Debug print setelah penghapusan dari daftar lokal
-    print("Hotel with ID: $hotelId removed from local favoriteItems list");
+    print("Hotel with ID: $hotelId removed successfully");
   } catch (e) {
-    // Tampilkan error jika penghapusan gagal
     print("Failed to remove from favorites: $e");
   }
 }
 
+// Periksa apakah hotel ada dalam daftar favorit
+bool isFavorite(Map<String, dynamic> hotel) {
+  return favoriteItems.any((item) => item['id'] == hotel['id']);
+}
 }

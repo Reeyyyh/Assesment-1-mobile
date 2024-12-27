@@ -341,22 +341,46 @@ class HomeView extends StatelessWidget {
                               top: 2,
                               right: 2,
                               child: Container(
-                                padding: const EdgeInsets.all(1.5),
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.4),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.favorite_border,
-                                    color: Colors.white,
+                                  padding: const EdgeInsets.all(1.5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.4),
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
-                                  onPressed: () {
-                                    Get.find<FavoriteController>()
-                                        .addToFavorites(hotel);
-                                  },
-                                ),
-                              ),
+                                  child: Obx(
+                                    () {
+                                      final favoriteController =
+                                          Get.find<FavoriteController>();
+
+                                      // Periksa apakah hotel ada di daftar favorit berdasarkan ID
+                                      final isFavorited =
+                                          favoriteController.favoriteItems.any(
+                                        (item) => item['id'] == hotel['id'],
+                                      );
+
+                                      return IconButton(
+                                        icon: Icon(
+                                          isFavorited
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color: isFavorited
+                                              ? Colors.red
+                                              : Colors.white,
+                                        ),
+                                        onPressed: () {
+                                          if (isFavorited) {
+                                            // Hapus dari favorit berdasarkan UID unik
+                                            favoriteController
+                                                .removeFromFavorites(
+                                                    hotel['id']);
+                                          } else {
+                                            // Tambahkan ke favorit
+                                            favoriteController
+                                                .addToFavorites(hotel);
+                                          }
+                                        },
+                                      );
+                                    },
+                                  )),
                             ),
                           ],
                         ),
