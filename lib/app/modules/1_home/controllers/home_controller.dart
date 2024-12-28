@@ -12,6 +12,8 @@ class HomeController extends GetxController {
   var randomHotelList = [].obs;
   var currentSearchQuery = ''.obs; // Menyimpan kata kunci pencarian terakhir
 
+  var selectedPrice = 1.obs;
+
   var isLoading = true.obs; // Status loading
 
   final ConnectivityController connectivityController =
@@ -39,7 +41,6 @@ class HomeController extends GetxController {
   );
 }
 
-
   // Filter berdasarkan lokasi
   void filterHotels(String query) {
     currentSearchQuery.value = query;
@@ -52,6 +53,33 @@ class HomeController extends GetxController {
     print(
         'Jumlah hasil filter: ${filteredHotelList.length}'); // Debugging hasil filter
   }
+
+  // Filter berdasarkan harga
+  // void filterHotelsByPrice(int priceOrder) {
+  //   filteredHotelList.value = hotelList;
+  //   if (priceOrder == 1) {
+  //     filteredHotelList.sort((a, b) => a['price'].compareTo(b['price']));
+  //   } else {
+  //     filteredHotelList.sort((a, b) => b['price'].compareTo(a['price']));
+  //   }
+  // }
+
+  void filterHotelsByPrice(int priceOrder) {
+  filteredHotelList.value = hotelList;
+
+  filteredHotelList.sort((a, b) {
+    // Pastikan harga diambil sebagai angka (misalnya double atau int)
+    var priceA = a['price'] is String ? double.parse(a['price']) : a['price'];
+    var priceB = b['price'] is String ? double.parse(b['price']) : b['price'];
+
+    if (priceOrder == 1) {
+      return priceA.compareTo(priceB); // Urutkan dari harga terendah
+    } else {
+      return priceB.compareTo(priceA); // Urutkan dari harga tertinggi
+    }
+  });
+}
+
 
   // Manual refresh function
   Future<void> refreshData() async {

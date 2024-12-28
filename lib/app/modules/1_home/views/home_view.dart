@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_app/app/data/connections/controllers/connectivity_controller.dart';
+import 'package:hotel_app/app/modules/1_home/elements/filter_dialog.dart';
 import 'package:hotel_app/app/modules/1_home/widgets/offline_widget.dart';
 import 'package:hotel_app/app/modules/3_favorite/controllers/favorite_controller.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -257,12 +258,29 @@ class HomeView extends StatelessWidget {
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Discover More',
-              style: tema.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment
+                  .spaceBetween, // Menjaga teks dan ikon terpisah
+              children: [
+                Text(
+                  'Discover More',
+                  style: tema.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.filter_list, color: tema.iconTheme.color),
+                  onPressed: () {
+                    showDialog(
+                      context: Get
+                          .context!, // Gunakan Get.context! untuk mendapatkan context
+                      builder: (context) =>
+                          FilterDialog(controller: controller),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),
@@ -424,8 +442,7 @@ class HomeView extends StatelessWidget {
                                   fontSize: controller.imageFont,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                overflow: TextOverflow
-                                    .ellipsis,
+                                overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                               const SizedBox(height: 4),
