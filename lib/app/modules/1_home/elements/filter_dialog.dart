@@ -13,7 +13,7 @@ class FilterDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Hanya dropdown untuk Price
+          // Filter berdasarkan harga
           Obx(() {
             return ListTile(
               title: const Text('By Price'),
@@ -22,6 +22,25 @@ class FilterDialog extends StatelessWidget {
                 onChanged: (value) {
                   controller.selectedPrice.value = value!;
                   controller.filterHotelsByPrice(value);
+                  Navigator.of(context).pop(); // Tutup dialog setelah memilih
+                },
+                items: const [
+                  DropdownMenuItem(value: 1, child: Text('Low to High')),
+                  DropdownMenuItem(value: 2, child: Text('High to Low')),
+                ],
+              ),
+            );
+          }),
+
+          // Filter berdasarkan rating
+          Obx(() {
+            return ListTile(
+              title: const Text('By Rating'),
+              trailing: DropdownButton<int>(
+                value: controller.selectedRating.value, // Ganti dengan variabel untuk rating
+                onChanged: (value) {
+                  // Panggil fungsi filter berdasarkan rating
+                  controller.filterHotelsByRating(value!);
                   Navigator.of(context).pop(); // Tutup dialog setelah memilih
                 },
                 items: const [

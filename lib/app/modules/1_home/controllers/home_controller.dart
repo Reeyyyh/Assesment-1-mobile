@@ -13,6 +13,7 @@ class HomeController extends GetxController {
   var currentSearchQuery = ''.obs; // Menyimpan kata kunci pencarian terakhir
 
   var selectedPrice = 1.obs;
+  var selectedRating = 1.obs;
 
   var isLoading = true.obs; // Status loading
 
@@ -21,25 +22,25 @@ class HomeController extends GetxController {
 
   // Real-time listener for Firestore
   void fetchHotelsRealtime() {
-  isLoading.value = true;
-  FirebaseFirestore.instance.collection('datahotel').snapshots().listen(
-    (snapshot) {
-      var randomHotels = (snapshot.docs..shuffle()).take(5).toList();
-      randomHotelList.value = randomHotels.map((doc) {
-        var data = doc.data();
-        return data;
-      }).toList();
+    isLoading.value = true;
+    FirebaseFirestore.instance.collection('datahotel').snapshots().listen(
+      (snapshot) {
+        var randomHotels = (snapshot.docs..shuffle()).take(5).toList();
+        randomHotelList.value = randomHotels.map((doc) {
+          var data = doc.data();
+          return data;
+        }).toList();
 
-      hotelList.value = snapshot.docs.map((doc) {
-        var data = doc.data();
-        return data;
-      }).toList();
+        hotelList.value = snapshot.docs.map((doc) {
+          var data = doc.data();
+          return data;
+        }).toList();
 
-      filteredHotelList.value = hotelList; // Tetap sesuai logika Anda
-      isLoading.value = false;
-    },
-  );
-}
+        filteredHotelList.value = hotelList; // Tetap sesuai logika Anda
+        isLoading.value = false;
+      },
+    );
+  }
 
   // Filter berdasarkan lokasi
   void filterHotels(String query) {
@@ -54,28 +55,35 @@ class HomeController extends GetxController {
         'Jumlah hasil filter: ${filteredHotelList.length}'); // Debugging hasil filter
   }
 
-  // Filter berdasarkan harga
-  // void filterHotelsByPrice(int priceOrder) {
-  //   filteredHotelList.value = hotelList;
-  //   if (priceOrder == 1) {
-  //     filteredHotelList.sort((a, b) => a['price'].compareTo(b['price']));
-  //   } else {
-  //     filteredHotelList.sort((a, b) => b['price'].compareTo(a['price']));
-  //   }
-  // }
-
+  // filter berdasarkan price
   void filterHotelsByPrice(int priceOrder) {
+    filteredHotelList.value = hotelList;
+
+    filteredHotelList.sort((a, b) {
+      // Pastikan harga diambil sebagai angka (misalnya double atau int)
+      var priceA = a['price'] is String ? double.parse(a['price']) : a['price'];
+      var priceB = b['price'] is String ? double.parse(b['price']) : b['price'];
+
+      if (priceOrder == 1) {
+        return priceA.compareTo(priceB); // Urutkan dari harga terendah
+      } else {
+        return priceB.compareTo(priceA); // Urutkan dari harga tertinggi
+      }
+    });
+  }
+
+  void filterHotelsByRating(int ratingOrder) {
   filteredHotelList.value = hotelList;
 
   filteredHotelList.sort((a, b) {
-    // Pastikan harga diambil sebagai angka (misalnya double atau int)
-    var priceA = a['price'] is String ? double.parse(a['price']) : a['price'];
-    var priceB = b['price'] is String ? double.parse(b['price']) : b['price'];
+    // Pastikan rating diambil sebagai angka (misalnya double atau int)
+    var ratingA = a['rating'] is String ? double.parse(a['rating']) : a['rating'];
+    var ratingB = b['rating'] is String ? double.parse(b['rating']) : b['rating'];
 
-    if (priceOrder == 1) {
-      return priceA.compareTo(priceB); // Urutkan dari harga terendah
+    if (ratingOrder == 1) {
+      return ratingA.compareTo(ratingB); // Urutkan dari rating terendah
     } else {
-      return priceB.compareTo(priceA); // Urutkan dari harga tertinggi
+      return ratingB.compareTo(ratingA); // Urutkan dari rating tertinggi
     }
   });
 }
@@ -83,26 +91,25 @@ class HomeController extends GetxController {
 
   // Manual refresh function
   Future<void> refreshData() async {
-  isLoading.value = true;
-  currentSearchQuery.value = ''; // Reset search query
-  try {
-    final snapshot =
-        await FirebaseFirestore.instance.collection('datahotel').get();
-    hotelList.value = snapshot.docs.map((doc) => doc.data()).toList();
-    filteredHotelList.value = hotelList;
+    isLoading.value = true;
+    currentSearchQuery.value = ''; // Reset search query
+    try {
+      final snapshot =
+          await FirebaseFirestore.instance.collection('datahotel').get();
+      hotelList.value = snapshot.docs.map((doc) => doc.data()).toList();
+      filteredHotelList.value = hotelList;
 
-    var randomHotels = (snapshot.docs..shuffle()).take(5).toList();
-    randomHotelList.value = randomHotels.map((doc) => doc.data()).toList();
+      var randomHotels = (snapshot.docs..shuffle()).take(5).toList();
+      randomHotelList.value = randomHotels.map((doc) => doc.data()).toList();
 
-    // Panggil fetchFavorites dari FavoriteController
-    Get.find<FavoriteController>().fetchFavorites();
-  } catch (e) {
-    print("Error refreshing data: $e");
-  } finally {
-    isLoading.value = false; // Pastikan status loading diatur ulang
+      // Panggil fetchFavorites dari FavoriteController
+      Get.find<FavoriteController>().fetchFavorites();
+    } catch (e) {
+      print("Error refreshing data: $e");
+    } finally {
+      isLoading.value = false; // Pastikan status loading diatur ulang
+    }
   }
-}
-
 
   @override
   void onInit() {
